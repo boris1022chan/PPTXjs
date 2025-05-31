@@ -27,13 +27,13 @@
 
         var _order = 1;
 
-        var app_verssion ;
+        var app_verssion;
 
-        var rtl_langs_array = ["he-IL", "ar-AE", "ar-SA", "dv-MV", "fa-IR","ur-PK"]
+        var rtl_langs_array = ["he-IL", "ar-AE", "ar-SA", "dv-MV", "fa-IR", "ur-PK"]
 
         var slideFactor = 96 / 914400;
         var fontSizeFactor = 4 / 3.2;
-        ////////////////////// 
+        //////////////////////
         var slideWidth = 0;
         var slideHeight = 0;
         var isSlideMode = false;
@@ -51,7 +51,7 @@
             mediaProcess: true, /** true,false: if true then process video and audio files */
             jsZipV2: false,
             themeProcess: true, /*true (default) , false, "colorsAndImageOnly"*/
-            incSlide:{
+            incSlide: {
                 width: 0,
                 height: 0
             },
@@ -113,7 +113,7 @@
         }
         FileReaderJS.setSync(false);
         if (settings.pptxFileUrl != "") {
-            try{
+            try {
                 JSZipUtils.getBinaryContent(settings.pptxFileUrl, function (err, content) {
                     var blob = new Blob([content]);
                     var file_name = settings.pptxFileUrl;
@@ -130,8 +130,8 @@
                         }
                     });
                 });
-            }catch(e){ 
-                console.error("file url error (" + settings.pptxFileUrl+ "0)")
+            } catch (e) {
+                console.error("file url error (" + settings.pptxFileUrl + "0)")
                 $(".slides-loadnig-msg").remove();
             }
         } else {
@@ -170,7 +170,7 @@
         function convertToHtml(file) {
             //'use strict';
             //console.log("file", file, "size:", file.byteLength);
-            if (file.byteLength < 10){
+            if (file.byteLength < 10) {
                 console.error("file url error (" + settings.pptxFileUrl + "0)")
                 $(".slides-loadnig-msg").remove();
                 return;
@@ -457,13 +457,13 @@
             // Pixel = EMUs * Resolution / 914400;  (Resolution = 96)
             //var standardHeight = 6858000;
             //console.log("slideFactor: ", slideFactor, "standardHeight:", standardHeight, (standardHeight - sldSzHeight) / standardHeight)
-            
+
             //slideFactor = (96 * (1 + ((standardHeight - sldSzHeight) / standardHeight))) / 914400 ;
 
             //slideFactor = slideFactor + sldSzHeight*((standardHeight - sldSzHeight) / standardHeight) ;
 
             //var ration = sldSzWidth / sldSzHeight;
-            
+
             //Scale
             // var viewProps = readXmlFile(zip, "ppt/viewProps.xml");
             // var scaleLoc = getTextByPathList(viewProps, ["p:viewPr", "p:slideViewPr", "p:cSldViewPr", "p:cViewPr","p:scale"]);
@@ -488,8 +488,8 @@
 
             defaultTextStyle = content["p:presentation"]["p:defaultTextStyle"];
 
-            slideWidth = sldSzWidth * slideFactor + settings.incSlide.width|0;// * scaleX;//parseInt(sldSzAttrs["cx"]) * 96 / 914400;
-            slideHeight = sldSzHeight * slideFactor + settings.incSlide.height|0;// * scaleY;//parseInt(sldSzAttrs["cy"]) * 96 / 914400;
+            slideWidth = sldSzWidth * slideFactor + settings.incSlide.width | 0;// * scaleX;//parseInt(sldSzAttrs["cx"]) * 96 / 914400;
+            slideHeight = sldSzHeight * slideFactor + settings.incSlide.height | 0;// * scaleY;//parseInt(sldSzAttrs["cy"]) * 96 / 914400;
             rtenObj = {
                 "width": slideWidth,
                 "height": slideHeight
@@ -615,7 +615,7 @@
                 var themeResContent = readXmlFile(zip, themeResFileName);
                 if (themeResContent !== null) {
                     var relationshipArray = themeResContent["Relationships"]["Relationship"];
-                    if (relationshipArray !== undefined){
+                    if (relationshipArray !== undefined) {
                         var themeFilename = "";
                         if (relationshipArray.constructor === Array) {
                             for (var i = 0; i < relationshipArray.length; i++) {
@@ -670,7 +670,7 @@
             }
             //console.log("diagramResObj: " , diagramResObj)
             // =====< Step 3 >=====
-            var slideContent = readXmlFile(zip, sldFileName , true);
+            var slideContent = readXmlFile(zip, sldFileName, true);
             var nodes = slideContent["p:sld"]["p:cSld"]["p:spTree"];
             var warpObj = {
                 "zip": zip,
@@ -803,7 +803,7 @@
                     result = processGroupSpNode(mcFallbackNode, warpObj, source);
                     break;
                 default:
-                    //console.log("nodeKey: ", nodeKey)
+                //console.log("nodeKey: ", nodeKey)
             }
 
             return result;
@@ -1024,7 +1024,7 @@
                 var w = parseInt(ext["cx"]) * slideFactor;
                 var h = parseInt(ext["cy"]) * slideFactor;
 
-                var svgCssName = "_svg_css_" + (Object.keys(styleTable).length + 1) + "_"  + Math.floor(Math.random() * 1001);
+                var svgCssName = "_svg_css_" + (Object.keys(styleTable).length + 1) + "_" + Math.floor(Math.random() * 1001);
                 //console.log("name:", name, "svgCssName: ", svgCssName)
                 var effectsClassName = svgCssName + "_effects";
                 result += "<svg class='drawing " + svgCssName + " " + effectsClassName + " ' _id='" + id + "' _idx='" + idx + "' _type='" + type + "' _name='" + name + "'" +
@@ -1048,7 +1048,7 @@
                 //     var clrFillType = getFillType(getTextByPathList(node, ["p:style","a:fillRef"]));
                 // }
                 //console.log("genShape: fillColor: ", fillColor, ", clrFillType: ", clrFillType, ", node: ", node)
-                /////////////////////////////////////////                    
+                /////////////////////////////////////////
                 if (clrFillType == "GRADIENT_FILL") {
                     grndFillFlg = true;
                     var color_arry = fillColor.color;
@@ -1067,7 +1067,7 @@
                 } else if (clrFillType == "PATTERN_FILL") {
                     var styleText = fillColor;
                     if (styleText in styleTable) {
-                        styleText += "do-nothing: " + svgCssName +";";
+                        styleText += "do-nothing: " + svgCssName + ";";
                     }
                     styleTable[styleText] = {
                         "name": svgCssName,
@@ -1144,7 +1144,7 @@
                     //shadowFilterStr += '<feGaussianBlur result="blurOut" in="offOut" stdDeviation="' + blurRad*(3/4) +'"/>'; //tdDeviation is how much to blur
                     //shadowFilterStr += '<feComponentTransfer><feFuncA type="linear" slope="0.5"/></feComponentTransfer>'; //slope is the opacity of the shadow
                     //shadowFilterStr += '<feBlend in="SourceGraphic" in2="blurOut"  mode="normal" />'; //this contains the element that the filter is applied to
-                    //shadowFilterStr += '</filter>'; 
+                    //shadowFilterStr += '</filter>';
                     //result += shadowFilterStr;
 
                     //css:
@@ -1159,7 +1159,7 @@
                         "text": svg_css_shadow
                     };
 
-                } 
+                }
                 ////////////////////////////////////////////////////////////////////////////////////////
                 if ((headEndNodeAttrs !== undefined && (headEndNodeAttrs["type"] === "triangle" || headEndNodeAttrs["type"] === "arrow")) ||
                     (tailEndNodeAttrs !== undefined && (tailEndNodeAttrs["type"] === "triangle" || tailEndNodeAttrs["type"] === "arrow"))) {
@@ -1807,7 +1807,7 @@
                         x1 = w * 3475 / 21600;
                         x2 = w * 18125 / 21600;
                         y1 = h * 10800 / 21600;
-                        //path attrs: w = 21600; h = 21600; 
+                        //path attrs: w = 21600; h = 21600;
                         var d = "M" + x1 + "," + 0 +
                             " L" + x2 + "," + 0 +
                             shapeArc(x2, h / 2, x1, y1, c3d4, c3d4 + cd2, false).replace("M", "L") +
@@ -1850,7 +1850,7 @@
                         x1 = w * 1 / 6;
                         x2 = w * 5 / 6;
                         y1 = h * 3 / 6;
-                        //path attrs: w = 6; h = 6; 
+                        //path attrs: w = 6; h = 6;
                         var d = "M" + 0 + "," + y1 +
                             " L" + x1 + "," + 0 +
                             " L" + x2 + "," + 0 +
@@ -4222,7 +4222,7 @@
                             x24 = g16 + g25;
                             x25 = g23 + g12;
 
-                            d_val = //" M" + x23 + "," + yPos + 
+                            d_val = //" M" + x23 + "," + yPos +
                                 shapeArc(x23 - g26, yPos, g26, g26, 0, 360, false) + //.replace("M","L") +
                                 " z" +
                                 " M" + x24 + "," + g17 +
@@ -4907,7 +4907,7 @@
                             "' stroke='" + border.color + "' stroke-width='" + border.width + "' stroke-dasharray='" + border.strokeDasharray + "' />";
 
                         //}else{
-                        //    result += "<path d='"+d_val+"' fill='" + (!imgFillFlg?(grndFillFlg?"url(#linGrd_"+shpId+")":fillColor):"url(#imgPtrn_"+shpId+")") + 
+                        //    result += "<path d='"+d_val+"' fill='" + (!imgFillFlg?(grndFillFlg?"url(#linGrd_"+shpId+")":fillColor):"url(#imgPtrn_"+shpId+")") +
                         //        "' stroke='none' />";
 
                         //}
@@ -6920,7 +6920,7 @@
                         stAng3dg = stAng3 * 180 / Math.PI;
                         swAngDg = swAng * 180 / Math.PI;
 
-                        var d_val = //"M" + ix + "," +iy + 
+                        var d_val = //"M" + ix + "," +iy +
                             shapeArc(wR, 0, wR, h, stAng2dg, stAng2dg + swAng2dg, false) + //.replace("M","L") +
                             " L" + x5 + "," + y1 +
                             " L" + x4 + "," + y1 +
@@ -8173,7 +8173,7 @@
                 }
 
                 result += "</svg>";
-                result += "<div class='block " + getVerticalAlign(node, slideLayoutSpNode, slideMasterSpNode, type) + //block content 
+                result += "<div class='block " + getVerticalAlign(node, slideLayoutSpNode, slideMasterSpNode, type) + //block content
                     " " + getContentDir(node, type, warpObj) +
                     "' _id='" + id + "' _idx='" + idx + "' _type='" + type + "' _name='" + name +
                     "' style='" +
@@ -8195,7 +8195,7 @@
                 // result = "";
             } else {
 
-                result += "<div class='block " + getVerticalAlign(node, slideLayoutSpNode, slideMasterSpNode, type) +//block content 
+                result += "<div class='block " + getVerticalAlign(node, slideLayoutSpNode, slideMasterSpNode, type) +//block content
                     " " + getContentDir(node, type, warpObj) +
                     "' _id='" + id + "' _idx='" + idx + "' _type='" + type + "' _name='" + name +
                     "' style='" +
@@ -8227,10 +8227,10 @@
             if (value < 0) {
                 value = 360 + value;
             }
-            //console.log("value: ",value)      
+            //console.log("value: ",value)
             value = Math.min(Math.max(value, 0), 360);
 
-            //calculate x,y coordinates of the point on the circle to draw the arc to. 
+            //calculate x,y coordinates of the point on the circle to draw the arc to.
             var x = Math.cos((2 * Math.PI) / (360 / value));
             var y = Math.sin((2 * Math.PI) / (360 / value));
 
@@ -8321,7 +8321,7 @@
             return dData;
         }
         function shapeSnipRoundRect(w, h, adj1, adj2, shapeType, adjType) {
-            /* 
+            /*
             shapeType: snip,round
             adjType: cornr1,cornr2,cornrAll,diag
             */
@@ -8366,13 +8366,13 @@
             var sides  = sidesNum;
             var radius = 100;
             var angle  = 2 * Math.PI / sides;
-            var points = []; 
-            
+            var points = [];
+
             for (var i = 0; i < sides; i++) {
                 points.push(radius + radius * Math.sin(i * angle));
                 points.push(radius - radius * Math.cos(i * angle));
             }
-            
+
             return points;
         }
         */
@@ -8528,13 +8528,13 @@
                     break;
                 case "http://schemas.openxmlformats.org/presentationml/2006/ole":
                     //result = genDiagram(node, warpObj, source, sType);
-                    var oleObjNode = getTextByPathList(node, ["a:graphic", "a:graphicData", "mc:AlternateContent", "mc:Fallback","p:oleObj"]);
-                    
+                    var oleObjNode = getTextByPathList(node, ["a:graphic", "a:graphicData", "mc:AlternateContent", "mc:Fallback", "p:oleObj"]);
+
                     if (oleObjNode === undefined) {
                         oleObjNode = getTextByPathList(node, ["a:graphic", "a:graphicData", "p:oleObj"]);
                     }
                     //console.log("node:", node, "oleObjNode:", oleObjNode)
-                    if (oleObjNode !== undefined){
+                    if (oleObjNode !== undefined) {
                         result = processGroupSpNode(oleObjNode, warpObj, source);
                     }
                     break;
@@ -8580,7 +8580,7 @@
             //console.log("genTextBody spNode: ", getTextByPathList(spNode,["p:spPr","a:xfrm","a:ext"]));
 
             //var lstStyle = textBodyNode["a:lstStyle"];
-            
+
             var apNode = textBodyNode["a:p"];
             if (apNode.constructor !== Array) {
                 apNode = [apNode];
@@ -8646,14 +8646,14 @@
                 text += "<div style='display: flex;" + sld_prg_width + sld_prg_height + "' class='slide-prgrph " + getHorizontalAlign(pNode, textBodyNode, idx, type, prg_dir, warpObj) + " " +
                     prg_dir + " " + cssName + "' >";
                 var buText_ary = genBuChar(pNode, i, spNode, textBodyNode, pFontStyle, idx, type, warpObj);
-                var isBullate = (buText_ary[0] !== undefined && buText_ary[0] !== null && buText_ary[0] != "" ) ? true : false;
+                var isBullate = (buText_ary[0] !== undefined && buText_ary[0] !== null && buText_ary[0] != "") ? true : false;
                 var bu_width = (buText_ary[1] !== undefined && buText_ary[1] !== null && isBullate) ? buText_ary[1] + buText_ary[2] : 0;
-                text += (buText_ary[0] !== undefined) ? buText_ary[0]:"";
-                //get text margin 
+                text += (buText_ary[0] !== undefined) ? buText_ary[0] : "";
+                //get text margin
                 var margin_ary = getPregraphMargn(pNode, idx, type, isBullate, warpObj);
                 var margin = margin_ary[0];
                 var mrgin_val = margin_ary[1];
-                if (prg_width_node === undefined && tbl_col_width !== undefined && prg_width_node != 0){
+                if (prg_width_node === undefined && tbl_col_width !== undefined && prg_width_node != 0) {
                     //sorce : table text
                     prg_width_node = tbl_col_width;
                 }
@@ -8678,7 +8678,7 @@
                         var prgr_text = genSpanElement(rNode[j], j, pNode, textBodyNode, pFontStyle, slideLayoutSpNode, idx, type, rNode.length, warpObj, isBullate);
                         if (isBullate) {
                             var txt_obj = $(prgr_text)
-                                .css({ 'position': 'absolute', 'float': 'left', 'white-space': 'nowrap', 'visibility': 'hidden'})
+                                .css({ 'position': 'absolute', 'float': 'left', 'white-space': 'nowrap', 'visibility': 'hidden' })
                                 .appendTo($('body'));
                             total_text_len += txt_obj.outerWidth();
                             txt_obj.remove();
@@ -8692,11 +8692,11 @@
                     //get prg_width_node if there is a bulltes
                     //console.log("total_text_len: ", total_text_len, "prg_width_node:", prg_width_node)
 
-                    if (total_text_len < prg_width_node ){
+                    if (total_text_len < prg_width_node) {
                         prg_width_node = total_text_len + bu_width;
                     }
                 }
-                var prg_width = ((prg_width_node !== undefined) ? ("width:" + (prg_width_node )) + "px;" : "width:inherit;");
+                var prg_width = ((prg_width_node !== undefined) ? ("width:" + (prg_width_node)) + "px;" : "width:inherit;");
                 text += "<div style='height: 100%;direction: initial;overflow-wrap:break-word;word-wrap: break-word;" + prg_width + margin + "' >";
                 text += prgrph_text;
                 text += "</div>";
@@ -8705,7 +8705,7 @@
 
             return text;
         }
-        
+
         function genBuChar(node, i, spNode, textBodyNode, pFontStyle, idx, type, warpObj) {
             //console.log("genBuChar node: ", node, ", spNode: ", spNode, ", pFontStyle: ", pFontStyle, "type", type)
             ///////////////////////////////////////Amir///////////////////////////////
@@ -8732,7 +8732,7 @@
             }
             //console.log("Bullet Size: " + bultSize);
 
-            var bullet = "", marRStr = "", marLStr = "", margin_val=0, font_val=0;
+            var bullet = "", marRStr = "", marLStr = "", margin_val = 0, font_val = 0;
             /////////////////////////////////////////////////////////////////
 
 
@@ -8782,14 +8782,14 @@
             if (buChar === undefined && buNum === undefined && buPic === undefined) {
 
                 if (lstStyle !== undefined) {
-                    BullNONE = getTextByPathList(lstStyle, [lvlStr,"a:buNone"]);
+                    BullNONE = getTextByPathList(lstStyle, [lvlStr, "a:buNone"]);
                     if (BullNONE !== undefined) {
                         return "";
                     }
                     buType = "TYPE_NONE";
-                    buChar = getTextByPathList(lstStyle, [lvlStr,"a:buChar", "attrs", "char"]);
-                    buNum = getTextByPathList(lstStyle, [lvlStr,"a:buAutoNum", "attrs", "type"]);
-                    buPic = getTextByPathList(lstStyle, [lvlStr,"a:buBlip"]);
+                    buChar = getTextByPathList(lstStyle, [lvlStr, "a:buChar", "attrs", "char"]);
+                    buNum = getTextByPathList(lstStyle, [lvlStr, "a:buAutoNum", "attrs", "type"]);
+                    buPic = getTextByPathList(lstStyle, [lvlStr, "a:buBlip"]);
                     if (buChar !== undefined) {
                         buType = "TYPE_BULLET";
                     }
@@ -8902,7 +8902,7 @@
                 margin_val = ((marginLeft + indent < 0) ? 0 : (marginLeft + indent));
                 marLStr += margin_val + "px;";
             }
-            
+
             //marR?
             var marRNode = getTextByPathList(pPrNode, ["attrs", "marR"]);
             if (marRNode === undefined && marLNode === undefined) {
@@ -8929,7 +8929,7 @@
             //console.log("NumericTypr: " + buNum);
             //console.log("buChar: " + (buChar === undefined?'':buChar.charCodeAt(0)));
             //get definde bullet COLOR
-            if (buClrNode === undefined){
+            if (buClrNode === undefined) {
                 //lstStyle
                 buClrNode = getTextByPathList(lstStyle, [lvlStr, "a:buClr"]);
             }
@@ -8968,7 +8968,7 @@
                         var dfltBultSizeNoPt = parseInt(dfltBultSize, "px");
                         bultSize = prcnt * (parseInt(dfltBultSizeNoPt)) + "px";// + "pt";
                     }
-                }else{
+                } else {
                     bultSize = (parseInt(buFontSize) / 100) * fontSizeFactor + "px";
                 }
             }
@@ -9009,8 +9009,8 @@
 
                 bullet = "<div style='height: 100%;" + typeface + ";" +
                     marLStr + marRStr +
-                    "font-size:" + bultSize + ";" ;
-                
+                    "font-size:" + bultSize + ";";
+
                 //bullet += "display: table-cell;";
                 //"line-height: 0px;";
                 if (color_tye == "solid") {
@@ -9075,7 +9075,7 @@
                 }
 
                 if (isRTL) {
-                    //bullet += "display: inline-block;white-space: nowrap ;direction:rtl"; // float: right;  
+                    //bullet += "display: inline-block;white-space: nowrap ;direction:rtl"; // float: right;
                     bullet += "white-space: nowrap ;direction:rtl"; // display: table-cell;;
                 }
                 var isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
@@ -9085,8 +9085,8 @@
                     //ie11 does not support unicode ?
                     htmlBu = getHtmlBullet(typefaceNode, buChar);
                 }
-                bullet += "'><div style='line-height: " + (font_val/2) + "px;'>" + htmlBu + "</div></div>"; //font_val
-                //} 
+                bullet += "'><div style='line-height: " + (font_val / 2) + "px;'>" + htmlBu + "</div></div>"; //font_val
+                //}
                 // else {
                 //     marginLeft = 328600 * slideFactor * lvl;
 
@@ -9197,17 +9197,17 @@
                     return "&#10004;";//"✔";  //10004 | U+2714 | Heavy check mark
                     break;
                 default:
-                    if (/*typefaceNode == "Wingdings" ||*/ typefaceNode == "Wingdings 2" || typefaceNode == "Wingdings 3"){
-                        var wingCharCode =  getDingbatToUnicode(typefaceNode, buChar);
-                        if (wingCharCode !== null){
+                    if (/*typefaceNode == "Wingdings" ||*/ typefaceNode == "Wingdings 2" || typefaceNode == "Wingdings 3") {
+                        var wingCharCode = getDingbatToUnicode(typefaceNode, buChar);
+                        if (wingCharCode !== null) {
                             return "&#" + wingCharCode + ";";
                         }
                     }
                     return "&#" + (buChar.charCodeAt(0)) + ";";
             }
         }
-        function getDingbatToUnicode(typefaceNode, buChar){
-            if (dingbat_unicode){
+        function getDingbatToUnicode(typefaceNode, buChar) {
+            if (dingbat_unicode) {
                 var dingbat_code = buChar.codePointAt(0) & 0xFFF;
                 var char_unicode = null;
                 var len = dingbat_unicode.length;
@@ -9325,7 +9325,7 @@
 
             //Language
             var lang = getTextByPathList(node, ["a:rPr", "attrs", "lang"]);
-            var isRtlLan = (lang !== undefined && rtl_langs_array.indexOf(lang) !== -1)?true:false;
+            var isRtlLan = (lang !== undefined && rtl_langs_array.indexOf(lang) !== -1) ? true : false;
             //rtl
             var getRtlVal = getTextByPathList(pPrNode, ["attrs", "rtl"]);
             if (getRtlVal === undefined) {
@@ -9431,7 +9431,7 @@
             }
             var font_size = getFontSize(node, textBodyNode, pFontStyle, lvl, type, warpObj);
             //text_style += "font-size:" + font_size + ";"
-            
+
             text_style += "font-size:" + font_size + ";" +
                 // marLStr +
                 "font-family:" + getFontType(node, type, warpObj, pFontStyle) + ";" +
@@ -9444,7 +9444,7 @@
             //console.log("genSpanElement node:", node, "lang:", lang, "isRtlLan:", isRtlLan, "span parent dir:", dirStr)
             if (isRtlLan) { //|| rIndex === undefined
                 styleText += "direction:rtl;";
-            }else{ //|| rIndex === undefined
+            } else { //|| rIndex === undefined
                 styleText += "direction:ltr;";
             }
             // } else if (dirStr == "rtl" && isRtlLan ) {
@@ -9527,23 +9527,23 @@
                 var linkURL = warpObj["slideResObj"][linkID]["target"];
                 linkURL = escapeHtml(linkURL);
                 return openElemnt + " class='text-block " + cssName + "' style='" + text_style + "'><a href='" + linkURL + "' " + linkColorSyle + "  " + linkTooltip + " target='_blank'>" +
-                        text.replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;').replace(/\s/g, "&nbsp;") + "</a>" + closeElemnt;
+                    text.replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;').replace(/\s/g, "&nbsp;") + "</a>" + closeElemnt;
             } else {
                 return openElemnt + " class='text-block " + cssName + "' style='" + text_style + "'>" + text.replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;').replace(/\s/g, "&nbsp;") + closeElemnt;//"</bdi>";
             }
 
         }
 
-        function getPregraphMargn(pNode, idx, type, isBullate, warpObj){
-            if (!isBullate){
-                return ["",0];
+        function getPregraphMargn(pNode, idx, type, isBullate, warpObj) {
+            if (!isBullate) {
+                return ["", 0];
             }
-            var marLStr = "", marRStr = "" , maginVal = 0;
+            var marLStr = "", marRStr = "", maginVal = 0;
             var pPrNode = pNode["a:pPr"];
             var layoutMasterNode = getLayoutAndMasterNode(pNode, idx, type, warpObj);
             var pPrNodeLaout = layoutMasterNode.nodeLaout;
             var pPrNodeMaster = layoutMasterNode.nodeMaster;
-            
+
             // var lang = getTextByPathList(node, ["a:rPr", "attrs", "lang"]);
             // var isRtlLan = (lang !== undefined && rtl_langs_array.indexOf(lang) !== -1) ? true : false;
             //rtl
@@ -9746,317 +9746,317 @@
                 trNodes = [trNodes];
             }
             //if (trNodes.constructor === Array) {
-                //multi rows
-                var totalrowSpan = 0;
-                var rowSpanAry = [];
-                for (var i = 0; i < trNodes.length; i++) {
-                    //////////////rows Style ////////////Amir
-                    var rowHeightParam = trNodes[i]["attrs"]["h"];
-                    var rowHeight = 0;
-                    var rowsStyl = "";
-                    if (rowHeightParam !== undefined) {
-                        rowHeight = parseInt(rowHeightParam) * slideFactor;
-                        rowsStyl += "height:" + rowHeight + "px;";
-                    }
-                    var fillColor = "";
-                    var row_borders = "";
-                    var fontClrPr = "";
-                    var fontWeight = "";
-                    var band_1H_fillColor;
-                    var band_2H_fillColor;
+            //multi rows
+            var totalrowSpan = 0;
+            var rowSpanAry = [];
+            for (var i = 0; i < trNodes.length; i++) {
+                //////////////rows Style ////////////Amir
+                var rowHeightParam = trNodes[i]["attrs"]["h"];
+                var rowHeight = 0;
+                var rowsStyl = "";
+                if (rowHeightParam !== undefined) {
+                    rowHeight = parseInt(rowHeightParam) * slideFactor;
+                    rowsStyl += "height:" + rowHeight + "px;";
+                }
+                var fillColor = "";
+                var row_borders = "";
+                var fontClrPr = "";
+                var fontWeight = "";
+                var band_1H_fillColor;
+                var band_2H_fillColor;
 
-                    if (thisTblStyle !== undefined && thisTblStyle["a:wholeTbl"] !== undefined) {
-                        var bgFillschemeClr = getTextByPathList(thisTblStyle, ["a:wholeTbl", "a:tcStyle", "a:fill", "a:solidFill"]);
+                if (thisTblStyle !== undefined && thisTblStyle["a:wholeTbl"] !== undefined) {
+                    var bgFillschemeClr = getTextByPathList(thisTblStyle, ["a:wholeTbl", "a:tcStyle", "a:fill", "a:solidFill"]);
+                    if (bgFillschemeClr !== undefined) {
+                        var local_fillColor = getSolidFill(bgFillschemeClr, undefined, undefined, warpObj);
+                        if (local_fillColor !== undefined) {
+                            fillColor = local_fillColor;
+                        }
+                    }
+                    var rowTxtStyl = getTextByPathList(thisTblStyle, ["a:wholeTbl", "a:tcTxStyle"]);
+                    if (rowTxtStyl !== undefined) {
+                        var local_fontColor = getSolidFill(rowTxtStyl, undefined, undefined, warpObj);
+                        if (local_fontColor !== undefined) {
+                            fontClrPr = local_fontColor;
+                        }
+
+                        var local_fontWeight = ((getTextByPathList(rowTxtStyl, ["attrs", "b"]) == "on") ? "bold" : "");
+                        if (local_fontWeight != "") {
+                            fontWeight = local_fontWeight
+                        }
+                    }
+                }
+
+                if (i == 0 && tblStylAttrObj["isFrstRowAttr"] == 1 && thisTblStyle !== undefined) {
+
+                    var bgFillschemeClr = getTextByPathList(thisTblStyle, ["a:firstRow", "a:tcStyle", "a:fill", "a:solidFill"]);
+                    if (bgFillschemeClr !== undefined) {
+                        var local_fillColor = getSolidFill(bgFillschemeClr, undefined, undefined, warpObj);
+                        if (local_fillColor !== undefined) {
+                            fillColor = local_fillColor;
+                        }
+                    }
+                    var borderStyl = getTextByPathList(thisTblStyle, ["a:firstRow", "a:tcStyle", "a:tcBdr"]);
+                    if (borderStyl !== undefined) {
+                        var local_row_borders = getTableBorders(borderStyl, warpObj);
+                        if (local_row_borders != "") {
+                            row_borders = local_row_borders;
+                        }
+                    }
+                    var rowTxtStyl = getTextByPathList(thisTblStyle, ["a:firstRow", "a:tcTxStyle"]);
+                    if (rowTxtStyl !== undefined) {
+                        var local_fontClrPr = getSolidFill(rowTxtStyl, undefined, undefined, warpObj);
+                        if (local_fontClrPr !== undefined) {
+                            fontClrPr = local_fontClrPr;
+                        }
+                        var local_fontWeight = ((getTextByPathList(rowTxtStyl, ["attrs", "b"]) == "on") ? "bold" : "");
+                        if (local_fontWeight !== "") {
+                            fontWeight = local_fontWeight;
+                        }
+                    }
+
+                } else if (i > 0 && tblStylAttrObj["isBandRowAttr"] == 1 && thisTblStyle !== undefined) {
+                    fillColor = "";
+                    row_borders = undefined;
+                    if ((i % 2) == 0 && thisTblStyle["a:band2H"] !== undefined) {
+                        // console.log("i: ", i, 'thisTblStyle["a:band2H"]:', thisTblStyle["a:band2H"])
+                        //check if there is a row bg
+                        var bgFillschemeClr = getTextByPathList(thisTblStyle, ["a:band2H", "a:tcStyle", "a:fill", "a:solidFill"]);
+                        if (bgFillschemeClr !== undefined) {
+                            var local_fillColor = getSolidFill(bgFillschemeClr, undefined, undefined, warpObj);
+                            if (local_fillColor !== "") {
+                                fillColor = local_fillColor;
+                                band_2H_fillColor = local_fillColor;
+                            }
+                        }
+
+
+                        var borderStyl = getTextByPathList(thisTblStyle, ["a:band2H", "a:tcStyle", "a:tcBdr"]);
+                        if (borderStyl !== undefined) {
+                            var local_row_borders = getTableBorders(borderStyl, warpObj);
+                            if (local_row_borders != "") {
+                                row_borders = local_row_borders;
+                            }
+                        }
+                        var rowTxtStyl = getTextByPathList(thisTblStyle, ["a:band2H", "a:tcTxStyle"]);
+                        if (rowTxtStyl !== undefined) {
+                            var local_fontClrPr = getSolidFill(rowTxtStyl, undefined, undefined, warpObj);
+                            if (local_fontClrPr !== undefined) {
+                                fontClrPr = local_fontClrPr;
+                            }
+                        }
+
+                        var local_fontWeight = ((getTextByPathList(rowTxtStyl, ["attrs", "b"]) == "on") ? "bold" : "");
+
+                        if (local_fontWeight !== "") {
+                            fontWeight = local_fontWeight;
+                        }
+                    }
+                    if ((i % 2) != 0 && thisTblStyle["a:band1H"] !== undefined) {
+                        var bgFillschemeClr = getTextByPathList(thisTblStyle, ["a:band1H", "a:tcStyle", "a:fill", "a:solidFill"]);
                         if (bgFillschemeClr !== undefined) {
                             var local_fillColor = getSolidFill(bgFillschemeClr, undefined, undefined, warpObj);
                             if (local_fillColor !== undefined) {
                                 fillColor = local_fillColor;
+                                band_1H_fillColor = local_fillColor;
                             }
                         }
-                        var rowTxtStyl = getTextByPathList(thisTblStyle, ["a:wholeTbl", "a:tcTxStyle"]);
-                        if (rowTxtStyl !== undefined) {
-                            var local_fontColor = getSolidFill(rowTxtStyl, undefined, undefined, warpObj);
-                            if (local_fontColor !== undefined) {
-                                fontClrPr = local_fontColor;
+                        var borderStyl = getTextByPathList(thisTblStyle, ["a:band1H", "a:tcStyle", "a:tcBdr"]);
+                        if (borderStyl !== undefined) {
+                            var local_row_borders = getTableBorders(borderStyl, warpObj);
+                            if (local_row_borders != "") {
+                                row_borders = local_row_borders;
                             }
-
+                        }
+                        var rowTxtStyl = getTextByPathList(thisTblStyle, ["a:band1H", "a:tcTxStyle"]);
+                        if (rowTxtStyl !== undefined) {
+                            var local_fontClrPr = getSolidFill(rowTxtStyl, undefined, undefined, warpObj);
+                            if (local_fontClrPr !== undefined) {
+                                fontClrPr = local_fontClrPr;
+                            }
                             var local_fontWeight = ((getTextByPathList(rowTxtStyl, ["attrs", "b"]) == "on") ? "bold" : "");
                             if (local_fontWeight != "") {
-                                fontWeight = local_fontWeight
-                            }
-                        }
-                    }
-
-                    if (i == 0 && tblStylAttrObj["isFrstRowAttr"] == 1 && thisTblStyle !== undefined) {
-
-                        var bgFillschemeClr = getTextByPathList(thisTblStyle, ["a:firstRow", "a:tcStyle", "a:fill", "a:solidFill"]);
-                        if (bgFillschemeClr !== undefined) {
-                            var local_fillColor = getSolidFill(bgFillschemeClr, undefined, undefined, warpObj);
-                            if (local_fillColor !== undefined) {
-                                fillColor = local_fillColor;
-                            }
-                        }
-                        var borderStyl = getTextByPathList(thisTblStyle, ["a:firstRow", "a:tcStyle", "a:tcBdr"]);
-                        if (borderStyl !== undefined) {
-                            var local_row_borders = getTableBorders(borderStyl, warpObj);
-                            if (local_row_borders != "") {
-                                row_borders = local_row_borders;
-                            }
-                        }
-                        var rowTxtStyl = getTextByPathList(thisTblStyle, ["a:firstRow", "a:tcTxStyle"]);
-                        if (rowTxtStyl !== undefined) {
-                            var local_fontClrPr = getSolidFill(rowTxtStyl, undefined, undefined, warpObj);
-                            if (local_fontClrPr !== undefined) {
-                                fontClrPr = local_fontClrPr;
-                            }
-                            var local_fontWeight = ((getTextByPathList(rowTxtStyl, ["attrs", "b"]) == "on") ? "bold" : "");
-                            if (local_fontWeight !== "") {
-                                fontWeight = local_fontWeight;
-                            }
-                        }
-
-                    } else if (i > 0 && tblStylAttrObj["isBandRowAttr"] == 1 && thisTblStyle !== undefined) {
-                        fillColor = "";
-                        row_borders = undefined;
-                        if ((i % 2) == 0 && thisTblStyle["a:band2H"] !== undefined) {
-                            // console.log("i: ", i, 'thisTblStyle["a:band2H"]:', thisTblStyle["a:band2H"])
-                            //check if there is a row bg
-                            var bgFillschemeClr = getTextByPathList(thisTblStyle, ["a:band2H", "a:tcStyle", "a:fill", "a:solidFill"]);
-                            if (bgFillschemeClr !== undefined) {
-                                var local_fillColor = getSolidFill(bgFillschemeClr, undefined, undefined, warpObj);
-                                if (local_fillColor !== "") {
-                                    fillColor = local_fillColor;
-                                    band_2H_fillColor = local_fillColor;
-                                }
-                            }
-
-
-                            var borderStyl = getTextByPathList(thisTblStyle, ["a:band2H", "a:tcStyle", "a:tcBdr"]);
-                            if (borderStyl !== undefined) {
-                                var local_row_borders = getTableBorders(borderStyl, warpObj);
-                                if (local_row_borders != "") {
-                                    row_borders = local_row_borders;
-                                }
-                            }
-                            var rowTxtStyl = getTextByPathList(thisTblStyle, ["a:band2H", "a:tcTxStyle"]);
-                            if (rowTxtStyl !== undefined) {
-                                var local_fontClrPr = getSolidFill(rowTxtStyl, undefined, undefined, warpObj);
-                                if (local_fontClrPr !== undefined) {
-                                    fontClrPr = local_fontClrPr;
-                                }
-                            }
-
-                            var local_fontWeight = ((getTextByPathList(rowTxtStyl, ["attrs", "b"]) == "on") ? "bold" : "");
-
-                            if (local_fontWeight !== "") {
-                                fontWeight = local_fontWeight;
-                            }
-                        }
-                        if ((i % 2) != 0 && thisTblStyle["a:band1H"] !== undefined) {
-                            var bgFillschemeClr = getTextByPathList(thisTblStyle, ["a:band1H", "a:tcStyle", "a:fill", "a:solidFill"]);
-                            if (bgFillschemeClr !== undefined) {
-                                var local_fillColor = getSolidFill(bgFillschemeClr, undefined, undefined, warpObj);
-                                if (local_fillColor !== undefined) {
-                                    fillColor = local_fillColor;
-                                    band_1H_fillColor = local_fillColor;
-                                }
-                            }
-                            var borderStyl = getTextByPathList(thisTblStyle, ["a:band1H", "a:tcStyle", "a:tcBdr"]);
-                            if (borderStyl !== undefined) {
-                                var local_row_borders = getTableBorders(borderStyl, warpObj);
-                                if (local_row_borders != "") {
-                                    row_borders = local_row_borders;
-                                }
-                            }
-                            var rowTxtStyl = getTextByPathList(thisTblStyle, ["a:band1H", "a:tcTxStyle"]);
-                            if (rowTxtStyl !== undefined) {
-                                var local_fontClrPr = getSolidFill(rowTxtStyl, undefined, undefined, warpObj);
-                                if (local_fontClrPr !== undefined) {
-                                    fontClrPr = local_fontClrPr;
-                                }
-                                var local_fontWeight = ((getTextByPathList(rowTxtStyl, ["attrs", "b"]) == "on") ? "bold" : "");
-                                if (local_fontWeight != "") {
-                                    fontWeight = local_fontWeight;
-                                }
-                            }
-                        }
-
-                    }
-                    //last row
-                    if (i == (trNodes.length - 1) && tblStylAttrObj["isLstRowAttr"] == 1 && thisTblStyle !== undefined) {
-                        var bgFillschemeClr = getTextByPathList(thisTblStyle, ["a:lastRow", "a:tcStyle", "a:fill", "a:solidFill"]);
-                        if (bgFillschemeClr !== undefined) {
-                            var local_fillColor = getSolidFill(bgFillschemeClr, undefined, undefined, warpObj);
-                            if (local_fillColor !== undefined) {
-                                fillColor = local_fillColor;
-                            }
-                            // var local_colorOpacity = getColorOpacity(bgFillschemeClr);
-                            // if(local_colorOpacity !== undefined){
-                            //     colorOpacity = local_colorOpacity;
-                            // }
-                        }
-                        var borderStyl = getTextByPathList(thisTblStyle, ["a:lastRow", "a:tcStyle", "a:tcBdr"]);
-                        if (borderStyl !== undefined) {
-                            var local_row_borders = getTableBorders(borderStyl, warpObj);
-                            if (local_row_borders != "") {
-                                row_borders = local_row_borders;
-                            }
-                        }
-                        var rowTxtStyl = getTextByPathList(thisTblStyle, ["a:lastRow", "a:tcTxStyle"]);
-                        if (rowTxtStyl !== undefined) {
-                            var local_fontClrPr = getSolidFill(rowTxtStyl, undefined, undefined, warpObj);
-                            if (local_fontClrPr !== undefined) {
-                                fontClrPr = local_fontClrPr;
-                            }
-
-                            var local_fontWeight = ((getTextByPathList(rowTxtStyl, ["attrs", "b"]) == "on") ? "bold" : "");
-                            if (local_fontWeight !== "") {
                                 fontWeight = local_fontWeight;
                             }
                         }
                     }
-                    rowsStyl += ((row_borders !== undefined) ? row_borders : "");
-                    rowsStyl += ((fontClrPr !== undefined) ? " color: #" + fontClrPr + ";" : "");
-                    rowsStyl += ((fontWeight != "") ? " font-weight:" + fontWeight + ";" : "");
-                    if (fillColor !== undefined && fillColor != "") {
-                        //rowsStyl += "background-color: rgba(" + hexToRgbNew(fillColor) + "," + colorOpacity + ");";
-                        rowsStyl += "background-color: #" + fillColor + ";";
+
+                }
+                //last row
+                if (i == (trNodes.length - 1) && tblStylAttrObj["isLstRowAttr"] == 1 && thisTblStyle !== undefined) {
+                    var bgFillschemeClr = getTextByPathList(thisTblStyle, ["a:lastRow", "a:tcStyle", "a:fill", "a:solidFill"]);
+                    if (bgFillschemeClr !== undefined) {
+                        var local_fillColor = getSolidFill(bgFillschemeClr, undefined, undefined, warpObj);
+                        if (local_fillColor !== undefined) {
+                            fillColor = local_fillColor;
+                        }
+                        // var local_colorOpacity = getColorOpacity(bgFillschemeClr);
+                        // if(local_colorOpacity !== undefined){
+                        //     colorOpacity = local_colorOpacity;
+                        // }
                     }
-                    tableHtml += "<tr style='" + rowsStyl + "'>";
-                    ////////////////////////////////////////////////
+                    var borderStyl = getTextByPathList(thisTblStyle, ["a:lastRow", "a:tcStyle", "a:tcBdr"]);
+                    if (borderStyl !== undefined) {
+                        var local_row_borders = getTableBorders(borderStyl, warpObj);
+                        if (local_row_borders != "") {
+                            row_borders = local_row_borders;
+                        }
+                    }
+                    var rowTxtStyl = getTextByPathList(thisTblStyle, ["a:lastRow", "a:tcTxStyle"]);
+                    if (rowTxtStyl !== undefined) {
+                        var local_fontClrPr = getSolidFill(rowTxtStyl, undefined, undefined, warpObj);
+                        if (local_fontClrPr !== undefined) {
+                            fontClrPr = local_fontClrPr;
+                        }
 
-                    var tcNodes = trNodes[i]["a:tc"];
-                    if (tcNodes !== undefined) {
-                        if (tcNodes.constructor === Array) {
-                            //multi columns
-                            var j = 0;
-                            if (rowSpanAry.length == 0) {
-                                rowSpanAry = Array.apply(null, Array(tcNodes.length)).map(function () { return 0 });
-                            }
-                            var totalColSpan = 0;
-                            while (j < tcNodes.length) {
-                                if (rowSpanAry[j] == 0 && totalColSpan == 0) {
-                                    var a_sorce;
-                                    //j=0 : first col
-                                    if (j == 0 && tblStylAttrObj["isFrstColAttr"] == 1) {
-                                        a_sorce = "a:firstCol";
-                                        if (tblStylAttrObj["isLstRowAttr"] == 1 && i == (trNodes.length - 1) &&
-                                            getTextByPathList(thisTblStyle, ["a:seCell"]) !== undefined) {
-                                            a_sorce = "a:seCell";
-                                        } else if (tblStylAttrObj["isFrstRowAttr"] == 1 && i == 0 &&
-                                            getTextByPathList(thisTblStyle, ["a:neCell"]) !== undefined) {
-                                            a_sorce = "a:neCell";
-                                        }
-                                    } else if ((j > 0 && tblStylAttrObj["isBandColAttr"] == 1) &&
-                                        !(tblStylAttrObj["isFrstColAttr"] == 1 && i == 0) &&
-                                        !(tblStylAttrObj["isLstRowAttr"] == 1 && i == (trNodes.length - 1)) &&
-                                        j != (tcNodes.length - 1)) {
+                        var local_fontWeight = ((getTextByPathList(rowTxtStyl, ["attrs", "b"]) == "on") ? "bold" : "");
+                        if (local_fontWeight !== "") {
+                            fontWeight = local_fontWeight;
+                        }
+                    }
+                }
+                rowsStyl += ((row_borders !== undefined) ? row_borders : "");
+                rowsStyl += ((fontClrPr !== undefined) ? " color: #" + fontClrPr + ";" : "");
+                rowsStyl += ((fontWeight != "") ? " font-weight:" + fontWeight + ";" : "");
+                if (fillColor !== undefined && fillColor != "") {
+                    //rowsStyl += "background-color: rgba(" + hexToRgbNew(fillColor) + "," + colorOpacity + ");";
+                    rowsStyl += "background-color: #" + fillColor + ";";
+                }
+                tableHtml += "<tr style='" + rowsStyl + "'>";
+                ////////////////////////////////////////////////
 
-                                        if ((j % 2) != 0) {
+                var tcNodes = trNodes[i]["a:tc"];
+                if (tcNodes !== undefined) {
+                    if (tcNodes.constructor === Array) {
+                        //multi columns
+                        var j = 0;
+                        if (rowSpanAry.length == 0) {
+                            rowSpanAry = Array.apply(null, Array(tcNodes.length)).map(function () { return 0 });
+                        }
+                        var totalColSpan = 0;
+                        while (j < tcNodes.length) {
+                            if (rowSpanAry[j] == 0 && totalColSpan == 0) {
+                                var a_sorce;
+                                //j=0 : first col
+                                if (j == 0 && tblStylAttrObj["isFrstColAttr"] == 1) {
+                                    a_sorce = "a:firstCol";
+                                    if (tblStylAttrObj["isLstRowAttr"] == 1 && i == (trNodes.length - 1) &&
+                                        getTextByPathList(thisTblStyle, ["a:seCell"]) !== undefined) {
+                                        a_sorce = "a:seCell";
+                                    } else if (tblStylAttrObj["isFrstRowAttr"] == 1 && i == 0 &&
+                                        getTextByPathList(thisTblStyle, ["a:neCell"]) !== undefined) {
+                                        a_sorce = "a:neCell";
+                                    }
+                                } else if ((j > 0 && tblStylAttrObj["isBandColAttr"] == 1) &&
+                                    !(tblStylAttrObj["isFrstColAttr"] == 1 && i == 0) &&
+                                    !(tblStylAttrObj["isLstRowAttr"] == 1 && i == (trNodes.length - 1)) &&
+                                    j != (tcNodes.length - 1)) {
 
-                                            var aBandNode = getTextByPathList(thisTblStyle, ["a:band2V"]);
-                                            if (aBandNode === undefined) {
-                                                aBandNode = getTextByPathList(thisTblStyle, ["a:band1V"]);
-                                                if (aBandNode !== undefined) {
-                                                    a_sorce = "a:band2V";
-                                                }
-                                            } else {
+                                    if ((j % 2) != 0) {
+
+                                        var aBandNode = getTextByPathList(thisTblStyle, ["a:band2V"]);
+                                        if (aBandNode === undefined) {
+                                            aBandNode = getTextByPathList(thisTblStyle, ["a:band1V"]);
+                                            if (aBandNode !== undefined) {
                                                 a_sorce = "a:band2V";
                                             }
-
+                                        } else {
+                                            a_sorce = "a:band2V";
                                         }
-                                    }
 
-                                    if (j == (tcNodes.length - 1) && tblStylAttrObj["isLstColAttr"] == 1) {
-                                        a_sorce = "a:lastCol";
-                                        if (tblStylAttrObj["isLstRowAttr"] == 1 && i == (trNodes.length - 1) && getTextByPathList(thisTblStyle, ["a:swCell"]) !== undefined) {
-                                            a_sorce = "a:swCell";
-                                        } else if (tblStylAttrObj["isFrstRowAttr"] == 1 && i == 0 && getTextByPathList(thisTblStyle, ["a:nwCell"]) !== undefined) {
-                                            a_sorce = "a:nwCell";
-                                        }
-                                    }
-
-                                    var cellParmAry = getTableCellParams(tcNodes[j], getColsGrid, i , j , thisTblStyle, a_sorce, warpObj)
-                                    var text = cellParmAry[0];
-                                    var colStyl = cellParmAry[1];
-                                    var cssName = cellParmAry[2];
-                                    var rowSpan = cellParmAry[3];
-                                    var colSpan = cellParmAry[4];
-
-
-
-                                    if (rowSpan !== undefined) {
-                                        totalrowSpan++;
-                                        rowSpanAry[j] = parseInt(rowSpan) - 1;
-                                        tableHtml += "<td class='" + cssName + "' data-row='" + i + "," + j + "' rowspan ='" +
-                                            parseInt(rowSpan) + "' style='" + colStyl + "'>" + text + "</td>";
-                                    } else if (colSpan !== undefined) {
-                                        tableHtml += "<td class='" + cssName + "' data-row='" + i + "," + j + "' colspan = '" +
-                                            parseInt(colSpan) + "' style='" + colStyl + "'>" + text + "</td>";
-                                        totalColSpan = parseInt(colSpan) - 1;
-                                    } else {
-                                        tableHtml += "<td class='" + cssName + "' data-row='" + i + "," + j + "' style = '" + colStyl + "'>" + text + "</td>";
-                                    }
-
-                                } else {
-                                    if (rowSpanAry[j] != 0) {
-                                        rowSpanAry[j] -= 1;
-                                    }
-                                    if (totalColSpan != 0) {
-                                        totalColSpan--;
                                     }
                                 }
-                                j++;
-                            }
-                        } else {
-                            //single column 
 
-                            var a_sorce;
-                            if (tblStylAttrObj["isFrstColAttr"] == 1 && !(tblStylAttrObj["isLstRowAttr"] == 1)) {
-                                a_sorce = "a:firstCol";
-
-                            } else if ((tblStylAttrObj["isBandColAttr"] == 1) && !(tblStylAttrObj["isLstRowAttr"] == 1)) {
-
-                                var aBandNode = getTextByPathList(thisTblStyle, ["a:band2V"]);
-                                if (aBandNode === undefined) {
-                                    aBandNode = getTextByPathList(thisTblStyle, ["a:band1V"]);
-                                    if (aBandNode !== undefined) {
-                                        a_sorce = "a:band2V";
+                                if (j == (tcNodes.length - 1) && tblStylAttrObj["isLstColAttr"] == 1) {
+                                    a_sorce = "a:lastCol";
+                                    if (tblStylAttrObj["isLstRowAttr"] == 1 && i == (trNodes.length - 1) && getTextByPathList(thisTblStyle, ["a:swCell"]) !== undefined) {
+                                        a_sorce = "a:swCell";
+                                    } else if (tblStylAttrObj["isFrstRowAttr"] == 1 && i == 0 && getTextByPathList(thisTblStyle, ["a:nwCell"]) !== undefined) {
+                                        a_sorce = "a:nwCell";
                                     }
+                                }
+
+                                var cellParmAry = getTableCellParams(tcNodes[j], getColsGrid, i, j, thisTblStyle, a_sorce, warpObj)
+                                var text = cellParmAry[0];
+                                var colStyl = cellParmAry[1];
+                                var cssName = cellParmAry[2];
+                                var rowSpan = cellParmAry[3];
+                                var colSpan = cellParmAry[4];
+
+
+
+                                if (rowSpan !== undefined) {
+                                    totalrowSpan++;
+                                    rowSpanAry[j] = parseInt(rowSpan) - 1;
+                                    tableHtml += "<td class='" + cssName + "' data-row='" + i + "," + j + "' rowspan ='" +
+                                        parseInt(rowSpan) + "' style='" + colStyl + "'>" + text + "</td>";
+                                } else if (colSpan !== undefined) {
+                                    tableHtml += "<td class='" + cssName + "' data-row='" + i + "," + j + "' colspan = '" +
+                                        parseInt(colSpan) + "' style='" + colStyl + "'>" + text + "</td>";
+                                    totalColSpan = parseInt(colSpan) - 1;
                                 } else {
+                                    tableHtml += "<td class='" + cssName + "' data-row='" + i + "," + j + "' style = '" + colStyl + "'>" + text + "</td>";
+                                }
+
+                            } else {
+                                if (rowSpanAry[j] != 0) {
+                                    rowSpanAry[j] -= 1;
+                                }
+                                if (totalColSpan != 0) {
+                                    totalColSpan--;
+                                }
+                            }
+                            j++;
+                        }
+                    } else {
+                        //single column
+
+                        var a_sorce;
+                        if (tblStylAttrObj["isFrstColAttr"] == 1 && !(tblStylAttrObj["isLstRowAttr"] == 1)) {
+                            a_sorce = "a:firstCol";
+
+                        } else if ((tblStylAttrObj["isBandColAttr"] == 1) && !(tblStylAttrObj["isLstRowAttr"] == 1)) {
+
+                            var aBandNode = getTextByPathList(thisTblStyle, ["a:band2V"]);
+                            if (aBandNode === undefined) {
+                                aBandNode = getTextByPathList(thisTblStyle, ["a:band1V"]);
+                                if (aBandNode !== undefined) {
                                     a_sorce = "a:band2V";
                                 }
-                            }
-
-                            if (tblStylAttrObj["isLstColAttr"] == 1 && !(tblStylAttrObj["isLstRowAttr"] == 1)) {
-                                a_sorce = "a:lastCol";
-                            }
-
-
-                            var cellParmAry = getTableCellParams(tcNodes, getColsGrid , i , undefined , thisTblStyle, a_sorce, warpObj)
-                            var text = cellParmAry[0];
-                            var colStyl = cellParmAry[1];
-                            var cssName = cellParmAry[2];
-                            var rowSpan = cellParmAry[3];
-
-                            if (rowSpan !== undefined) {
-                                tableHtml += "<td  class='" + cssName + "' rowspan='" + parseInt(rowSpan) + "' style = '" + colStyl + "'>" + text + "</td>";
                             } else {
-                                tableHtml += "<td class='" + cssName + "' style='" + colStyl + "'>" + text + "</td>";
+                                a_sorce = "a:band2V";
                             }
                         }
+
+                        if (tblStylAttrObj["isLstColAttr"] == 1 && !(tblStylAttrObj["isLstRowAttr"] == 1)) {
+                            a_sorce = "a:lastCol";
+                        }
+
+
+                        var cellParmAry = getTableCellParams(tcNodes, getColsGrid, i, undefined, thisTblStyle, a_sorce, warpObj)
+                        var text = cellParmAry[0];
+                        var colStyl = cellParmAry[1];
+                        var cssName = cellParmAry[2];
+                        var rowSpan = cellParmAry[3];
+
+                        if (rowSpan !== undefined) {
+                            tableHtml += "<td  class='" + cssName + "' rowspan='" + parseInt(rowSpan) + "' style = '" + colStyl + "'>" + text + "</td>";
+                        } else {
+                            tableHtml += "<td class='" + cssName + "' style='" + colStyl + "'>" + text + "</td>";
+                        }
                     }
-                    tableHtml += "</tr>";
                 }
-                //////////////////////////////////////////////////////////////////////////////////
-            
+                tableHtml += "</tr>";
+            }
+            //////////////////////////////////////////////////////////////////////////////////
+
 
             return tableHtml;
         }
-        
-        function getTableCellParams(tcNodes, getColsGrid , row_idx , col_idx , thisTblStyle, cellSource, warpObj) {
+
+        function getTableCellParams(tcNodes, getColsGrid, row_idx, col_idx, thisTblStyle, cellSource, warpObj) {
             //thisTblStyle["a:band1V"] => thisTblStyle[cellSource]
-            //text, cell-width, cell-borders, 
+            //text, cell-width, cell-borders,
             //var text = genTextBody(tcNodes["a:txBody"], tcNodes, undefined, undefined, undefined, undefined, warpObj);//tableStyles
             var rowSpan = getTextByPathList(tcNodes, ["attrs", "rowSpan"]);
             var colSpan = getTextByPathList(tcNodes, ["attrs", "gridSpan"]);
@@ -10074,17 +10074,17 @@
                 lin_right = "",
                 lin_bottom_left_to_top_right = "",
                 lin_top_left_to_bottom_right = "";
-            
+
             var colSapnInt = parseInt(colSpan);
             var total_col_width = 0;
-            if (!isNaN(colSapnInt) && colSapnInt > 1){
-                for (var k = 0; k < colSapnInt ; k++) {
+            if (!isNaN(colSapnInt) && colSapnInt > 1) {
+                for (var k = 0; k < colSapnInt; k++) {
                     total_col_width += parseInt(getTextByPathList(getColsGrid[col_idx + k], ["attrs", "w"]));
                 }
-            }else{
+            } else {
                 total_col_width = getTextByPathList((col_idx === undefined) ? getColsGrid : getColsGrid[col_idx], ["attrs", "w"]);
             }
-            
+
 
             var text = genTextBody(tcNodes["a:txBody"], tcNodes, undefined, undefined, undefined, undefined, warpObj, total_col_width);//tableStyles
 
@@ -10322,7 +10322,7 @@
             //readXmlFile(zip, sldFileName)
             /**files define the diagram:
              * 1-colors#.xml,
-             * 2-data#.xml, 
+             * 2-data#.xml,
              * 3-layout#.xml,
              * 4-quickStyle#.xml.
              * 5-drawing#.xml, which Microsoft added as an extension for persisting diagram layout information.
@@ -10456,7 +10456,7 @@
 
         }
         function getVerticalMargins(pNode, textBodyNode, type, idx, warpObj) {
-            //margin-top ; 
+            //margin-top ;
             //a:pPr => a:spcBef => a:spcPts (/100) | a:spcPct (/?)
             //margin-bottom
             //a:pPr => a:spcAft => a:spcPts (/100) | a:spcPct (/?)
@@ -10481,7 +10481,7 @@
             }
             var fontSize;
             if (getTextByPathList(pNode, ["a:r"]) !== undefined) {
-                var fontSizeStr = getFontSize(pNode["a:r"], textBodyNode,undefined, lvl, type, warpObj);
+                var fontSizeStr = getFontSize(pNode["a:r"], textBodyNode, undefined, lvl, type, warpObj);
                 if (fontSizeStr != "inherit") {
                     fontSize = parseInt(fontSizeStr, "px"); //pt
                 }
@@ -10492,7 +10492,7 @@
             //     spcBef = "margin-top:" + parseInt(spcBefNode)/100 + "pt;"
             // }
             // else{
-            //    //i did not found case with percentage 
+            //    //i did not found case with percentage
             //     spcBefNode = getTextByPathList(pNode, ["a:pPr", "a:spcBef", "a:spcPct","attrs","val"]);
             //     if(spcBefNode !== undefined){
             //         spcBef = "margin-top:" + parseInt(spcBefNode)/100 + "%;"
@@ -10503,7 +10503,7 @@
             //     spcAft = "margin-bottom:" + parseInt(spcAftNode)/100 + "pt;"
             // }
             // else{
-            //    //i did not found case with percentage 
+            //    //i did not found case with percentage
             //     spcAftNode = getTextByPathList(pNode, ["a:pPr", "a:spcAft", "a:spcPct","attrs","val"]);
             //     if(spcAftNode !== undefined){
             //         spcBef = "margin-bottom:" + parseInt(spcAftNode)/100 + "%;"
@@ -10513,7 +10513,7 @@
             //     //check in layout and then in master
             // }
             var isInLayoutOrMaster = true;
-            if(type == "shape" || type == "textBox"){
+            if (type == "shape" || type == "textBox") {
                 isInLayoutOrMaster = false;
             }
             if (isInLayoutOrMaster && (spcBefNode === undefined || spcAftNode === undefined || lnSpcNode === undefined)) {
@@ -10525,9 +10525,9 @@
                         spcBefNode = getTextByPathList(laypPrNode, ["a:spcBef", "a:spcPts", "attrs", "val"]);
                         // if(spcBefNode !== undefined){
                         //     spcBef = "margin-top:" + parseInt(spcBefNode)/100 + "pt;"
-                        // } 
+                        // }
                         // else{
-                        //    //i did not found case with percentage 
+                        //    //i did not found case with percentage
                         //     spcBefNode = getTextByPathList(laypPrNode, ["a:spcBef", "a:spcPct","attrs","val"]);
                         //     if(spcBefNode !== undefined){
                         //         spcBef = "margin-top:" + parseInt(spcBefNode)/100 + "%;"
@@ -10541,7 +10541,7 @@
                         //     spcAft = "margin-bottom:" + parseInt(spcAftNode)/100 + "pt;"
                         // }
                         // else{
-                        //    //i did not found case with percentage 
+                        //    //i did not found case with percentage
                         //     spcAftNode = getTextByPathList(laypPrNode, ["a:spcAft", "a:spcPct","attrs","val"]);
                         //     if(spcAftNode !== undefined){
                         //         spcBef = "margin-bottom:" + parseInt(spcAftNode)/100 + "%;"
@@ -10578,7 +10578,7 @@
                     case "ftr":
                     case "sldNum":
                     case "textBox":
-                    // case "shape":
+                        // case "shape":
                         dirLoc = "p:bodyStyle";
                         break;
                     case "shape":
@@ -10595,9 +10595,9 @@
                         spcBefNode = getTextByPathList(inLvlNode, ["a:spcBef", "a:spcPts", "attrs", "val"]);
                         // if(spcBefNode !== undefined){
                         //     spcBef = "margin-top:" + parseInt(spcBefNode)/100 + "pt;"
-                        // } 
+                        // }
                         // else{
-                        //    //i did not found case with percentage 
+                        //    //i did not found case with percentage
                         //     spcBefNode = getTextByPathList(inLvlNode, ["a:spcBef", "a:spcPct","attrs","val"]);
                         //     if(spcBefNode !== undefined){
                         //         spcBef = "margin-top:" + parseInt(spcBefNode)/100 + "%;"
@@ -10611,7 +10611,7 @@
                         //     spcAft = "margin-bottom:" + parseInt(spcAftNode)/100 + "pt;"
                         // }
                         // else{
-                        //    //i did not found case with percentage 
+                        //    //i did not found case with percentage
                         //     spcAftNode = getTextByPathList(inLvlNode, ["a:spcAft", "a:spcPct","attrs","val"]);
                         //     if(spcAftNode !== undefined){
                         //         spcBef = "margin-bottom:" + parseInt(spcAftNode)/100 + "%;"
@@ -10638,7 +10638,7 @@
             if (spcAftNode !== undefined) {
                 spcAfter = parseInt(spcAftNode) / 100;
             }
-            
+
             if (lnSpcNode !== undefined && fontSize !== undefined) {
                 if (lnSpcNodeType == "Pts") {
                     marginTopBottomStr += "padding-top: " + ((parseInt(lnSpcNode) / 100) - fontSize) + "px;";//+ "pt;";
@@ -10660,7 +10660,7 @@
             if (spcAftNode !== undefined || lnSpcNode !== undefined) {
                 //marginTopBottomStr += "margin-bottom: " + ((spcAfter - fontSize < 0) ? 0 : (spcAfter - fontSize)) + "pt;"; //margin-bottom: + spcLines
                 //marginTopBottomStr += "margin-bottom: " + spcAfter * (1 / 4) + "px;";// + "pt;";
-                marginTopBottomStr += "margin-bottom: " + spcAfter  + "px;";// + "pt;";
+                marginTopBottomStr += "margin-bottom: " + spcAfter + "px;";// + "pt;";
             }
 
             //console.log("getVerticalMargins 2 fontSize:", fontSize, "lnSpcNode:", lnSpcNode, "spcLines:", spcLines, "spcBefor:", spcBefor, "spcAfter:", spcAfter)
@@ -10685,7 +10685,7 @@
                 var lstStyle = textBodyNode["a:lstStyle"];
                 algn = getTextByPathList(lstStyle, [lvlStr, "attrs", "algn"]);
 
-                if (algn === undefined && idx !== undefined ) {
+                if (algn === undefined && idx !== undefined) {
                     //slidelayout
                     algn = getTextByPathList(warpObj["slideLayoutTables"]["idxTable"][idx], ["p:txBody", "a:lstStyle", lvlStr, "attrs", "algn"]);
                     if (algn === undefined) {
@@ -10730,10 +10730,10 @@
             if (algn !== undefined) {
                 switch (algn) {
                     case "l":
-                        if (prg_dir == "pregraph-rtl"){
+                        if (prg_dir == "pregraph-rtl") {
                             //return "h-right";
                             return "h-left-rtl";
-                        }else{
+                        } else {
                             return "h-left";
                         }
                         break;
@@ -10741,7 +10741,7 @@
                         if (prg_dir == "pregraph-rtl") {
                             //return "h-left";
                             return "h-right-rtl";
-                        }else{
+                        } else {
                             return "h-right";
                         }
                         break;
@@ -10759,7 +10759,7 @@
         function getPregraphDir(node, textBodyNode, idx, type, warpObj) {
             var rtl = getTextByPathList(node, ["a:pPr", "attrs", "rtl"]);
             //console.log("getPregraphDir node:", node, "textBodyNode", textBodyNode, "rtl:", rtl, "idx", idx, "type", type, "warpObj", warpObj)
-          
+
 
             if (rtl === undefined) {
                 var layoutMasterNode = getLayoutAndMasterNode(node, idx, type, warpObj);
@@ -10783,7 +10783,7 @@
 
             // if (contentDir == "content"){
             //     return "pregraph-ltr";
-            // } else if (contentDir == "content-rtl"){ 
+            // } else if (contentDir == "content-rtl"){
             //     return "pregraph-rtl";
             // }
             // return "";
@@ -10805,14 +10805,14 @@
                 }
             }
             //console.log("getVerticalAlign:", node, slideLayoutSpNode, slideMasterSpNode, type, anchor)
-            return (anchor === "ctr")?"v-mid" : ((anchor === "b") ? "v-down" : "v-up");
+            return (anchor === "ctr") ? "v-mid" : ((anchor === "b") ? "v-down" : "v-up");
         }
 
         function getContentDir(node, type, warpObj) {
             return "content";
             var defRtl = getTextByPathList(node, ["p:txBody", "a:lstStyle", "a:defPPr", "attrs", "rtl"]);
             if (defRtl !== undefined) {
-                if (defRtl == "1"){
+                if (defRtl == "1") {
                     return "content-rtl";
                 } else if (defRtl == "0") {
                     return "content";
@@ -10862,7 +10862,7 @@
                 if (dirVal == "1") {
                     return "content-rtl";
                 }
-            } 
+            }
             // else {
             //     if (type == "textBox") {
             //         var dirVal = getTextByPathList(warpObj, ["defaultTextStyle", "a:lvl1pPr", "attrs", "rtl"]);
@@ -10931,7 +10931,7 @@
                     var shpFill = rPrNode["a:gradFill"];
                     color = getGradientFill(shpFill, warpObj);
                     colorType = "gradient";
-                } 
+                }
             }
             if (color === undefined && getTextByPathList(lstStyle, ["a:lvl" + lvl + "pPr", "a:defRPr"]) !== undefined) {
                 //lstStyle
@@ -11067,7 +11067,7 @@
                     // txtEffObj.glow = {
                     //     radiuse: rad,
                     //     color: glowClr
-                    // } 
+                    // }
                     txtEffects.push(
                         "drop-shadow(0 0 " + rad / 3 + "px #" + glowClr + ") " +
                         "drop-shadow(0 0 " + rad * 2 / 3 + "px #" + glowClr + ") " +
@@ -11153,7 +11153,7 @@
         function getFontSize(node, textBodyNode, pFontStyle, lvl, type, warpObj) {
             // if(type == "sldNum")
             //console.log("getFontSize node:", node, "lstStyle", lstStyle, "lvl:", lvl, 'type:', type, "warpObj:", warpObj)
-            var lstStyle = (textBodyNode !== undefined)? textBodyNode["a:lstStyle"] : undefined;
+            var lstStyle = (textBodyNode !== undefined) ? textBodyNode["a:lstStyle"] : undefined;
             var lvlpPr = "a:lvl" + lvl + "pPr";
             var fontSize = undefined;
             var sz, kern;
@@ -11165,7 +11165,7 @@
                 fontSize = parseInt(sz) / 100;
             }
             if ((isNaN(fontSize) || fontSize === undefined) && node["a:t"] === undefined) {
-                sz = getTextByPathList(node["a:endParaRPr"], [ "attrs", "sz"]);
+                sz = getTextByPathList(node["a:endParaRPr"], ["attrs", "sz"]);
                 fontSize = parseInt(sz) / 100;
             }
             if ((isNaN(fontSize) || fontSize === undefined) && lstStyle !== undefined) {
@@ -11175,12 +11175,12 @@
             //a:spAutoFit
             var isAutoFit = false;
             var isKerning = false;
-            if (textBodyNode !== undefined){
+            if (textBodyNode !== undefined) {
                 var spAutoFitNode = getTextByPathList(textBodyNode, ["a:bodyPr", "a:spAutoFit"]);
                 // if (spAutoFitNode === undefined) {
                 //     spAutoFitNode = getTextByPathList(textBodyNode, ["a:bodyPr", "a:normAutofit"]);
                 // }
-                if (spAutoFitNode !== undefined){
+                if (spAutoFitNode !== undefined) {
                     isAutoFit = true;
                     isKerning = true;
                 }
@@ -11193,7 +11193,7 @@
                 sz = getTextByPathList(warpObj["slideLayoutTables"], ["typeTable", type, "p:txBody", "a:lstStyle", lvlpPr, "a:defRPr", "attrs", "sz"]);
                 fontSize = parseInt(sz) / 100;
                 kern = getTextByPathList(warpObj["slideLayoutTables"], ["typeTable", type, "p:txBody", "a:lstStyle", lvlpPr, "a:defRPr", "attrs", "kern"]);
-                if (isKerning && kern !== undefined && !isNaN(fontSize) && (fontSize - parseInt(kern) / 100) > 0){
+                if (isKerning && kern !== undefined && !isNaN(fontSize) && (fontSize - parseInt(kern) / 100) > 0) {
                     fontSize = fontSize - parseInt(kern) / 100;
                 }
             }
@@ -11222,20 +11222,20 @@
 
                     if (sz === undefined) {
                         sz = getTextByPathList(warpObj["defaultTextStyle"], [lvlpPr, "a:defRPr", "attrs", "sz"]);
-                        kern = (kern === undefined)? getTextByPathList(warpObj["defaultTextStyle"], [lvlpPr, "a:defRPr", "attrs", "kern"]) : undefined;
+                        kern = (kern === undefined) ? getTextByPathList(warpObj["defaultTextStyle"], [lvlpPr, "a:defRPr", "attrs", "kern"]) : undefined;
                         isKerning = false;
                     }
                     //  else if (type === undefined || type == "shape") {
                     //     sz = getTextByPathList(warpObj["slideMasterTextStyles"], ["p:otherStyle", lvlpPr, "a:defRPr", "attrs", "sz"]);
                     //     kern = getTextByPathList(warpObj["slideMasterTextStyles"], ["p:otherStyle", lvlpPr, "a:defRPr", "attrs", "kern"]);
-                    // } 
+                    // }
                     // else if (type == "textBox") {
                     //     sz = getTextByPathList(warpObj["slideMasterTextStyles"], ["p:otherStyle", lvlpPr, "a:defRPr", "attrs", "sz"]);
                     //     kern = getTextByPathList(warpObj["slideMasterTextStyles"], ["p:otherStyle", lvlpPr, "a:defRPr", "attrs", "kern"]);
                     // }
-                } 
+                }
                 fontSize = parseInt(sz) / 100;
-                if (isKerning && kern !== undefined && !isNaN(fontSize) && ((fontSize - parseInt(kern) / 100) > parseInt(kern) / 100 )) {
+                if (isKerning && kern !== undefined && !isNaN(fontSize) && ((fontSize - parseInt(kern) / 100) > parseInt(kern) / 100)) {
                     fontSize = fontSize - parseInt(kern) / 100;
                     //fontSize =  parseInt(kern) / 100;
                 }
@@ -11244,14 +11244,14 @@
             var baseline = getTextByPathList(node, ["a:rPr", "attrs", "baseline"]);
             if (baseline !== undefined && !isNaN(fontSize)) {
                 var baselineVl = parseInt(baseline) / 100000;
-                //fontSize -= 10; 
+                //fontSize -= 10;
                 // fontSize = fontSize * baselineVl;
                 fontSize -= baselineVl;
             }
 
-            if (!isNaN(fontSize)){
+            if (!isNaN(fontSize)) {
                 var normAutofit = getTextByPathList(textBodyNode, ["a:bodyPr", "a:normAutofit", "attrs", "fontScale"]);
-                if (normAutofit !== undefined && normAutofit != 0){
+                if (normAutofit !== undefined && normAutofit != 0) {
                     //console.log("fontSize", fontSize, "normAutofit: ", normAutofit, normAutofit/100000)
                     fontSize = Math.round(fontSize * (normAutofit / 100000))
                 }
@@ -11403,7 +11403,7 @@
                 cssText = "border: ";
                 lineNode = node["p:spPr"]["a:ln"];
                 //subNodeTxt = "p:spPr";
-                //node["p:style"]["a:lnRef"] = 
+                //node["p:style"]["a:lnRef"] =
             } else if (bType == "text") {
                 cssText = "";
                 lineNode = node["a:rPr"]["a:ln"];
@@ -11419,7 +11419,7 @@
             //console.log("lineNode: ", lineNode)
             if (lineNode == undefined) {
                 var lnRefNode = getTextByPathList(node, ["p:style", "a:lnRef"])
-                if (lnRefNode !== undefined){
+                if (lnRefNode !== undefined) {
                     var lnIdx = getTextByPathList(lnRefNode, ["attrs", "idx"]);
                     //console.log("lnIdx:", lnIdx, "lnStyleLst:", warpObj["themeContent"]["a:theme"]["a:themeElements"]["a:fmtScheme"]["a:lnStyleLst"]["a:ln"][Number(lnIdx) -1])
                     lineNode = warpObj["themeContent"]["a:theme"]["a:themeElements"]["a:fmtScheme"]["a:lnStyleLst"]["a:ln"][Number(lnIdx) - 1];
@@ -11436,7 +11436,7 @@
                 // Border width: 1pt = 12700, default = 0.75pt
                 var borderWidth = parseInt(getTextByPathList(lineNode, ["attrs", "w"])) / 12700;
                 if (isNaN(borderWidth) || borderWidth < 1) {
-                    cssText += (4/3) + "px ";//"1pt ";
+                    cssText += (4 / 3) + "px ";//"1pt ";
                 } else {
                     cssText += borderWidth + "px ";// + "pt ";
                 }
@@ -12029,7 +12029,7 @@
                 var clr_ary = [];
                 // duotone.forEach(function (clr) {
                 //     console.log("pic duotone clr: ", clr)
-                // }) 
+                // })
                 Object.keys(duotone).forEach(function (clr_type) {
                     //console.log("pic duotone clr: clr_type: ", clr_type, duotone[clr_type])
                     if (clr_type != "attrs") {
@@ -12374,7 +12374,7 @@
             bgColor = getSolidFill(bgClr, undefined, undefined, warpObj);
             //var angl_ary = getAnglefromParst(prst);
             //var ptrClr = "repeating-linear-gradient(" + angl + "deg,  #" + bgColor + ",#" + fgColor + " 2px);"
-            //linear-gradient(0deg, black 10 %, transparent 10 %, transparent 90 %, black 90 %, black), 
+            //linear-gradient(0deg, black 10 %, transparent 10 %, transparent 90 %, black 90 %, black),
             //linear-gradient(90deg, black 10 %, transparent 10 %, transparent 90 %, black 90 %, black);
             var linear_gradient = getLinerGrandient(prst, bgColor, fgColor);
             //console.log("getPatternFill: node:", node, ", prst: ", prst, ", fgColor: ", fgColor, ", bgColor:", bgColor, ', linear_gradient: ', linear_gradient)
@@ -12507,7 +12507,7 @@
                 //     return ["linear-gradient(45deg, transparent 0%, transparent calc(50% - 0.5px),  #" + fgColor + " 50%, transparent calc(50% + 0.5px),  transparent 100%), " +
                 //         "linear-gradient(-45deg, transparent 0%, transparent calc(50% - 0.5px) , #" + fgColor + " 50%, transparent calc(50% + 0.5px),  transparent 100%)  " +
                 //         "#" + bgColor + ";", "4px 4px"];
-                //     break 
+                //     break
 
                 case "dashUpDiag":
                     return ["repeating-linear-gradient(152deg, #" + fgColor + ", #" + fgColor + " 5% , transparent 0, transparent 70%)" +
@@ -12598,8 +12598,8 @@
                         "#" + bgColor + ";", "4px 4px"];
                     /**
                         background-color: #6677dd;
-                        background-image: 
-                        repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(255, 255, 255, 0.2) 35px, rgba(255, 255, 255, 0.2) 70px), 
+                        background-image:
+                        repeating-linear-gradient(0deg, transparent, transparent 35px, rgba(255, 255, 255, 0.2) 35px, rgba(255, 255, 255, 0.2) 70px),
                         repeating-linear-gradient(90deg, transparent, transparent 35px, rgba(255,255,255,0.4) 35px, rgba(255,255,255,0.4) 70px);
                      */
                     break;
@@ -12741,7 +12741,7 @@
             }
             //console.log("color: [%cstart]", "color: #" + color, tinycolor(color).toHslString(), color)
 
-            //fix color -------------------------------------------------------- TODO 
+            //fix color -------------------------------------------------------- TODO
             //
             //1. "alpha":
             //Specifies the opacity as expressed by a percentage value.
@@ -14088,14 +14088,6 @@
         */
         function tXml(t, r) { "use strict"; function e() { for (var r = []; t[l];)if (t.charCodeAt(l) == s) { if (t.charCodeAt(l + 1) === h) return l = t.indexOf(u, l), l + 1 && (l += 1), r; if (t.charCodeAt(l + 1) === v) { if (t.charCodeAt(l + 2) == m) { for (; -1 !== l && (t.charCodeAt(l) !== d || t.charCodeAt(l - 1) != m || t.charCodeAt(l - 2) != m || -1 == l);)l = t.indexOf(u, l + 1); -1 === l && (l = t.length) } else for (l += 2; t.charCodeAt(l) !== d && t[l];)l++; l++; continue } var e = a(); r.push(e) } else { var i = n(); i.trim().length > 0 && r.push(i), l++ } return r } function n() { var r = l; return l = t.indexOf(c, l) - 1, -2 === l && (l = t.length), t.slice(r, l + 1) } function i() { for (var r = l; -1 === A.indexOf(t[l]) && t[l];)l++; return t.slice(r, l) } function a() { var r = {}; l++, r.tagName = i(); for (var n = !1; t.charCodeAt(l) !== d && t[l];) { var a = t.charCodeAt(l); if (a > 64 && 91 > a || a > 96 && 123 > a) { for (var f = i(), c = t.charCodeAt(l); c && c !== p && c !== g && !(c > 64 && 91 > c || c > 96 && 123 > c) && c !== d;)l++, c = t.charCodeAt(l); if (n || (r.attributes = {}, n = !0), c === p || c === g) { var s = o(); if (-1 === l) return r } else s = null, l--; r.attributes[f] = s } l++ } if (t.charCodeAt(l - 1) !== h) if ("script" == r.tagName) { var u = l + 1; l = t.indexOf("</script>", l), r.children = [t.slice(u, l - 1)], l += 8 } else if ("style" == r.tagName) { var u = l + 1; l = t.indexOf("</style>", l), r.children = [t.slice(u, l - 1)], l += 7 } else -1 == C.indexOf(r.tagName) && (l++, r.children = e(f)); else l++; return r } function o() { var r = t[l], e = ++l; return l = t.indexOf(r, e), t.slice(e, l) } function f() { var e = new RegExp("\\s" + r.attrName + "\\s*=['\"]" + r.attrValue + "['\"]").exec(t); return e ? e.index : -1 } r = r || {}; var l = r.pos || 0, c = "<", s = "<".charCodeAt(0), u = ">", d = ">".charCodeAt(0), m = "-".charCodeAt(0), h = "/".charCodeAt(0), v = "!".charCodeAt(0), p = "'".charCodeAt(0), g = '"'.charCodeAt(0), A = "\n	>/= ", C = ["img", "br", "input", "meta", "link"], y = null; if (void 0 !== r.attrValue) { r.attrName = r.attrName || "id"; for (var y = []; -1 !== (l = f());)l = t.lastIndexOf("<", l), -1 !== l && y.push(a()), t = t.substr(l), l = 0 } else y = r.parseNode ? a() : e(); return r.filter && (y = tXml.filter(y, r.filter)), r.simplify && (y = tXml.simplify(y)), y.pos = l, y } var _order = 1; tXml.simplify = function (t) { var r = {}; if (void 0 === t) return {}; if (1 === t.length && "string" == typeof t[0]) return t[0]; t.forEach(function (t) { if ("object" == typeof t) { r[t.tagName] || (r[t.tagName] = []); var e = tXml.simplify(t.children || []); r[t.tagName].push(e), t.attributes && (e.attrs = t.attributes), void 0 === e.attrs ? e.attrs = { order: _order } : e.attrs.order = _order, _order++ } }); for (var e in r) 1 == r[e].length && (r[e] = r[e][0]); return r }, tXml.filter = function (t, r) { var e = []; return t.forEach(function (t) { if ("object" == typeof t && r(t) && e.push(t), t.children) { var n = tXml.filter(t.children, r); e = e.concat(n) } }), e }, tXml.stringify = function (t) { function r(t) { if (t) for (var r = 0; r < t.length; r++)"string" == typeof t[r] ? n += t[r].trim() : e(t[r]) } function e(t) { n += "<" + t.tagName; for (var e in t.attributes) n += null === t.attributes[e] ? " " + e : -1 === t.attributes[e].indexOf('"') ? " " + e + '="' + t.attributes[e].trim() + '"' : " " + e + "='" + t.attributes[e].trim() + "'"; n += ">", r(t.children), n += "</" + t.tagName + ">" } var n = ""; return r(t), n }, tXml.toContentString = function (t) { if (Array.isArray(t)) { var r = ""; return t.forEach(function (t) { r += " " + tXml.toContentString(t), r = r.trim() }), r } return "object" == typeof t ? tXml.toContentString(t.children) : " " + t }, tXml.getElementById = function (t, r, e) { var n = tXml(t, { attrValue: r, simplify: e }); return e ? n : n[0] }, tXml.getElementsByClassName = function (t, r, e) { return tXml(t, { attrName: "class", attrValue: "[a-zA-Z0-9-s ]*" + r + "[a-zA-Z0-9-s ]*", simplify: e }) }, tXml.parseStream = function (t, r) { if ("function" == typeof r && (cb = r, r = 0), "string" == typeof r && (r = r.length + 2), "string" == typeof t) { var e = require("fs"); t = e.createReadStream(t, { start: r }), r = 0 } var n = r, i = "", a = 0; return t.on("data", function (r) { a++, i += r; for (var e = 0; ;) { n = i.indexOf("<", n) + 1; var o = tXml(i, { pos: n, parseNode: !0 }); if (n = o.pos, n > i.length - 1 || e > n) return void (e && (i = i.slice(e), n = 0, e = 0)); t.emit("xml", o), e = n } i = i.slice(n), n = 0 }), t.on("end", function () { console.log("end") }), t }, "object" == typeof module && (module.exports = tXml);
     };
-
-    /*!
-    JSZipUtils - A collection of cross-browser utilities to go along with JSZip.
-    <http://stuk.github.io/jszip-utils>
-    (c) 2014 Stuart Knightley, David Duponchel
-    Dual licenced under the MIT license or GPLv3. See https://raw.github.com/Stuk/jszip-utils/master/LICENSE.markdown.
-    */
-    !function (a) { "object" == typeof exports ? module.exports = a() : "function" == typeof define && define.amd ? define(a) : "undefined" != typeof window ? window.JSZipUtils = a() : "undefined" != typeof global ? global.JSZipUtils = a() : "undefined" != typeof self && (self.JSZipUtils = a()) }(function () { return function a(b, c, d) { function e(g, h) { if (!c[g]) { if (!b[g]) { var i = "function" == typeof require && require; if (!h && i) return i(g, !0); if (f) return f(g, !0); throw new Error("Cannot find module '" + g + "'") } var j = c[g] = { exports: {} }; b[g][0].call(j.exports, function (a) { var c = b[g][1][a]; return e(c ? c : a) }, j, j.exports, a, b, c, d) } return c[g].exports } for (var f = "function" == typeof require && require, g = 0; g < d.length; g++)e(d[g]); return e }({ 1: [function (a, b) { "use strict"; function c() { try { return new window.XMLHttpRequest } catch (a) { } } function d() { try { return new window.ActiveXObject("Microsoft.XMLHTTP") } catch (a) { } } var e = {}; e._getBinaryFromXHR = function (a) { return a.response || a.responseText }; var f = window.ActiveXObject ? function () { return c() || d() } : c; e.getBinaryContent = function (a, b) { try { var c = f(); c.open("GET", a, !0), "responseType" in c && (c.responseType = "arraybuffer"), c.overrideMimeType && c.overrideMimeType("text/plain; charset=x-user-defined"), c.onreadystatechange = function () { var d, f; if (4 === c.readyState) if (200 === c.status || 0 === c.status) { d = null, f = null; try { d = e._getBinaryFromXHR(c) } catch (g) { f = new Error(g) } b(f, d) } else b(new Error("Ajax error for " + a + " : " + this.status + " " + this.statusText), null) }, c.send() } catch (d) { b(new Error(d), null) } }, b.exports = e }, {}] }, {}, [1])(1) });
 
     // TinyColor v1.4.2
     // https://github.com/bgrins/TinyColor
