@@ -12197,12 +12197,7 @@
                     }
                 }
             } else {
-                if (isSvgMode) {
-                    return "none";
-                } else {
-                    return "background-color: inherit;";
-                }
-
+                return isSvgMode ? "none" : ""; //"background-color: initial;";
             }
 
         }
