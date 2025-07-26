@@ -67,37 +67,14 @@ function pptxToHtml(options) {
     }
 
     function convertToHtml(file) {
-        //'use strict';
-        //console.log("file", file, "size:", file.byteLength);
         if (file.byteLength < 10) {
             console.error("file url error (" + settings.pptxFileUrl + "0)")
             return;
         }
+
         var zip = new JSZip();
         zip = zip.load(file);
-        var rslt_ary = processPPTX(zip);
-        for (var i = 0; i < rslt_ary.length; i++) {
-            switch (rslt_ary[i]["type"]) {
-                case "slide":
-                    $result.insertAdjacentHTML('beforeend', rslt_ary[i]["data"]);
-                    break;
-                case "pptx-thumb":
-                    break;
-                case "slideSize":
-                    slideWidth = rslt_ary[i]["data"].width;
-                    slideHeight = rslt_ary[i]["data"].height;
-                    break;
-                case "globalCSS":
-                    $result.insertAdjacentHTML('beforeend', `<style>${rslt_ary[i]["data"]}</style>`);
-                    break;
-                case "ExecutionTime":
-                    processMsgQueue(MsgQueue);
-                    setNumericBullets(document.querySelectorAll(".block"));
-                    setNumericBullets(document.querySelectorAll("table td"));
-                    break;
-                default:
-            }
-        }
+        processPPTX(zip);
 
         if (document.getElementById("all_slides_warpper") === null) {
             const slides = $result.querySelectorAll(".slide");
@@ -112,27 +89,9 @@ function pptxToHtml(options) {
     }
 
     function processPPTX(zip) {
-        var post_ary = [];
-        var dateBefore = new Date();
-
-        if (zip.file("docProps/thumbnail.jpeg") !== null) {
-            var pptxThumbImg = base64ArrayBuffer(zip.file("docProps/thumbnail.jpeg").asArrayBuffer());
-            post_ary.push({
-                "type": "pptx-thumb",
-                "data": pptxThumbImg,
-                "slide_num": -1
-            });
-        }
-
         var filesInfo = getContentTypes(zip);
         var slideSize = getSlideSizeAndSetDefaultTextStyle(zip);
         tableStyles = readXmlFile(zip, "ppt/tableStyles.xml");
-        //console.log("slideSize: ", slideSize)
-        post_ary.push({
-            "type": "slideSize",
-            "data": slideSize,
-            "slide_num": 0
-        });
 
         numOfSlides = filesInfo["slides"].length;
         for (var i = 0; i < numOfSlides; i++) {
@@ -148,7 +107,6 @@ function pptxToHtml(options) {
             var filename_no_path_no_ext = "";
             if (filename_no_path.indexOf(".") != -1) {
                 var filename_no_path_no_ext_ary = filename_no_path.split(".");
-                var slide_ext = filename_no_path_no_ext_ary.pop();
                 filename_no_path_no_ext = filename_no_path_no_ext_ary.join(".");
             }
             var slide_number = 1;
@@ -156,34 +114,14 @@ function pptxToHtml(options) {
                 slide_number = Number(filename_no_path_no_ext.substr(5));
             }
             var slideHtml = processSingleSlide(zip, filename, i, slideSize);
-            post_ary.push({
-                "type": "slide",
-                "data": slideHtml,
-                "slide_num": slide_number,
-                "file_name": filename_no_path_no_ext
-            });
-            post_ary.push({
-                "type": "progress-update",
-                "slide_num": (numOfSlides + i + 1),
-                "data": (i + 1) * 100 / numOfSlides
-            });
+            $result.insertAdjacentHTML("beforeend", slideHtml);
         }
 
-        post_ary.sort(function (a, b) {
-            return a.slide_num - b.slide_num;
-        });
+        $result.insertAdjacentHTML("beforeend", `<style>${genGlobalCSS()}</style>`);
 
-        post_ary.push({
-            "type": "globalCSS",
-            "data": genGlobalCSS()
-        });
-
-        var dateAfter = new Date();
-        post_ary.push({
-            "type": "ExecutionTime",
-            "data": dateAfter - dateBefore
-        });
-        return post_ary;
+        processMsgQueue(MsgQueue);
+        setNumericBullets(document.querySelectorAll(".block"));
+        setNumericBullets(document.querySelectorAll("table td"));
     }
 
     function readXmlFile(zip, filename, isSlideContent) {
