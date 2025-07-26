@@ -8611,38 +8611,16 @@
                 if (rNode === undefined && pNode !== undefined) {
                     // without r
                     var prgr_text = genSpanElement(pNode, undefined, spNode, textBodyNode, pFontStyle, slideLayoutSpNode, idx, type, 1, warpObj, isBullate);
-                    if (isBullate) {
-                        var txt_obj = $(prgr_text)
-                            .css({ 'position': 'absolute', 'float': 'left', 'white-space': 'nowrap', 'visibility': 'hidden' })
-                            .appendTo($('body'));
-                        total_text_len += txt_obj.outerWidth();
-                        txt_obj.remove();
-                    }
                     prgrph_text += prgr_text;
                 } else if (rNode !== undefined) {
                     // with multi r
                     for (var j = 0; j < rNode.length; j++) {
                         var prgr_text = genSpanElement(rNode[j], j, pNode, textBodyNode, pFontStyle, slideLayoutSpNode, idx, type, rNode.length, warpObj, isBullate);
-                        if (isBullate) {
-                            var txt_obj = $(prgr_text)
-                                .css({ 'position': 'absolute', 'float': 'left', 'white-space': 'nowrap', 'visibility': 'hidden' })
-                                .appendTo($('body'));
-                            total_text_len += txt_obj.outerWidth();
-                            txt_obj.remove();
-                        }
                         prgrph_text += prgr_text;
                     }
                 }
 
                 prg_width_node = parseInt(prg_width_node) * slideFactor - bu_width - mrgin_val;
-                if (isBullate) {
-                    //get prg_width_node if there is a bulltes
-                    //console.log("total_text_len: ", total_text_len, "prg_width_node:", prg_width_node)
-
-                    if (total_text_len < prg_width_node) {
-                        prg_width_node = total_text_len + bu_width;
-                    }
-                }
                 var prg_width = !!prg_width_node ? `width:${prg_width_node}px;` : "width:inherit;";
                 text += "<div style='height: 100%;direction: initial;overflow-wrap:break-word;word-wrap: break-word;" + prg_width + margin + "' >";
                 text += prgrph_text;
