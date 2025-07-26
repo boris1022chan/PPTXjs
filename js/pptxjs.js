@@ -13233,9 +13233,7 @@
                 return undefined;
             }
 
-            Object.prototype.set = function (parts, value) {
-                //var parts = prop.split('.');
-                var obj = this;
+            const set = function (obj, parts, value) {
                 var lent = parts.length;
                 for (var i = 0; i < lent; i++) {
                     var p = parts[i];
@@ -13251,7 +13249,7 @@
                 return obj;
             }
 
-            node.set(path, value)
+            set(node, path, value)
         }
 
         /**
