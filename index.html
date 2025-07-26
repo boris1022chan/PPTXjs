@@ -88,6 +88,8 @@
 			reader.onload = function (event) {
 				$("#result").pptxToHtml({
 					fileContent: event.target.result,
+					onComplete: (metadata) => console.log(metadata),
+					onError: (error) => console.error(error),
 					slideMode: false,
 					keyBoardShortCut: false,
 					slideModeConfig: {  //on slide mode (slideMode: true)

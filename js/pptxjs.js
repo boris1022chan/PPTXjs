@@ -34,12 +34,15 @@
         //////////////////////
         var slideWidth = 0;
         var slideHeight = 0;
+        var numOfSlides = 0;
         var isSlideMode = false;
         var processFullTheme = true;
         var styleTable = {};
         var settings = $.extend(true, {
             // These are the defaults.
             fileContent: null,
+            onComplete: () => { },
+            onError: () => { },
             slidesScale: "", //Change Slides scale by percent
             slideMode: false, /** true,false*/
             slideType: "divs2slidesjs",  /*'divs2slidesjs' (default) , 'revealjs'(https://revealjs.com)  -TODO*/
@@ -105,7 +108,16 @@
                 readAsDefault: "ArrayBuffer",
                 on: {
                     load: function (e) {
-                        convertToHtml(e.target.result);
+                        try {
+                            convertToHtml(e.target.result);
+                            settings.onComplete({
+                                width: slideWidth,
+                                height: slideHeight,
+                                numOfSlides,
+                            });
+                        } catch (err) {
+                            settings.onError(err);
+                        }
                     }
                 }
             });
@@ -276,7 +288,7 @@
                 "slide_num": 0
             });
 
-            var numOfSlides = filesInfo["slides"].length;
+            numOfSlides = filesInfo["slides"].length;
             for (var i = 0; i < numOfSlides; i++) {
                 var filename = filesInfo["slides"][i];
                 var filename_no_path = "";
