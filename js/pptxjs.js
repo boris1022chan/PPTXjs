@@ -9950,24 +9950,19 @@
                                 var text = cellParmAry[0];
                                 var colStyl = cellParmAry[1];
                                 var cssName = cellParmAry[2];
-                                var rowSpan = cellParmAry[3];
-                                var colSpan = cellParmAry[4];
+                                var rowSpan = parseInt(cellParmAry[3]) || 1;
+                                var colSpan = parseInt(cellParmAry[4]) || 1;
+                                var hMerge = cellParmAry[5];
 
-
-
-                                if (rowSpan !== undefined) {
+                                if (rowSpan) {
                                     totalrowSpan++;
-                                    rowSpanAry[j] = parseInt(rowSpan) - 1;
-                                    tableHtml += "<td class='" + cssName + "' data-row='" + i + "," + j + "' rowspan ='" +
-                                        parseInt(rowSpan) + "' style='" + colStyl + "'>" + text + "</td>";
-                                } else if (colSpan !== undefined) {
-                                    tableHtml += "<td class='" + cssName + "' data-row='" + i + "," + j + "' colspan = '" +
-                                        parseInt(colSpan) + "' style='" + colStyl + "'>" + text + "</td>";
-                                    totalColSpan = parseInt(colSpan) - 1;
-                                } else {
-                                    tableHtml += "<td class='" + cssName + "' data-row='" + i + "," + j + "' style = '" + colStyl + "'>" + text + "</td>";
+                                    for (let i = 0; i < colSpan; i++) {
+                                        rowSpanAry[j + i] = rowSpan - 1;
+                                    }
                                 }
-
+                                if (!hMerge) {
+                                    tableHtml += `<td class='${cssName}' data-row='${i},${j}' rowspan='${rowSpan}' colspan='${colSpan}' style='${colStyl}'>${text}</td>`;
+                                }
                             } else {
                                 if (rowSpanAry[j] != 0) {
                                     rowSpanAry[j] -= 1;
@@ -10192,7 +10187,7 @@
             colStyl += ((colFontClrPr !== "") ? "color: #" + colFontClrPr + ";" : "");
             colStyl += ((colFontWeight != "") ? " font-weight:" + colFontWeight + ";" : "");
 
-            return [text, colStyl, cssName, rowSpan, colSpan];
+            return [text, colStyl, cssName, rowSpan, colSpan, hMerge];
         }
 
         function genChart(node, warpObj) {
