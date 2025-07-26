@@ -12,47 +12,10 @@
 	<script type="text/javascript" src="./js/jquery-1.11.3.min.js"></script>
 	<script type="text/javascript" src="./js/d3.min.js"></script>
 	<script type="text/javascript" src="./js/dingbat.min.js"></script>
-	<script type="text/javascript" src="./js/divs2slides.min.js"></script>
 	<script type="text/javascript" src="./js/filereader.min.js"></script>
 	<script type="text/javascript" src="./js/jszip.min.js"></script>
 	<script type="text/javascript" src="./js/nv.d3.min.js"></script>
 	<script type="text/javascript" src="./js/pptxjs.min.js"></script>
-
-	<script type="text/javascript" src="./js/jquery.fullscreen-min.js"></script>
-
-	<script type="text/javascript">
-		$(function () {
-			var oldWidth, oldMargin, isFullscreenMode = false;
-			$("#fullscreen-btn").on("click", function () {
-
-				if (!isFullscreenMode) {
-					oldWidth = $("#result .slide").css("width");
-					oldMargin = $("#result .slide").css("margin");
-					$("#result .slide").css({
-						"width": "99%",
-						"margin": "0 auto"
-					})
-					$("#result").toggleFullScreen();
-					isFullscreenMode = true;
-				} else {
-					$("#result .slide").css({
-						"width": oldWidth,
-						"margin": oldMargin
-					})
-					$("#result").toggleFullScreen();
-					isFullscreenMode = false;
-				}
-			});
-			$(document).bind("fullscreenchange", function () {
-				if (!$(document).fullScreen()) {
-					$("#result .slide").css({
-						"width": oldWidth,
-						"margin": oldMargin
-					})
-				}
-			});
-		});
-	</script>
 	<style>
 		html,
 		body {
@@ -72,11 +35,7 @@
 	<div id="warper">
 		<input id="uploadFileInput" type="file" />
 		<br><br>
-		<div id="container">
-			<input id="fullscreen-btn" type="button" value="Fullscreen" />
-			<br>
-			<div id="result"></div>
-		</div>
+		<div id="container"></div>
 	</div>
 	<script>
 		document.getElementById("uploadFileInput").addEventListener("change", (e) => {
@@ -86,29 +45,10 @@
 			}
 			const reader = new FileReader();
 			reader.onload = function (event) {
-				$("#result").pptxToHtml({
+				$("#container").pptxToHtml({
 					fileContent: event.target.result,
 					onComplete: (metadata) => console.log(metadata),
 					onError: (error) => console.error(error),
-					slideMode: false,
-					keyBoardShortCut: false,
-					slideModeConfig: {  //on slide mode (slideMode: true)
-						first: 1,
-						nav: false, /** true,false : show or not nav buttons*/
-						navTxtColor: "white", /** color */
-						navNextTxt: "&#8250;", //">"
-						navPrevTxt: "&#8249;", //"<"
-						showPlayPauseBtn: false,/** true,false */
-						keyBoardShortCut: false, /** true,false */
-						showSlideNum: false, /** true,false */
-						showTotalSlideNum: false, /** true,false */
-						autoSlide: false, /** false or seconds (the pause time between slides) , F8 to active(keyBoardShortCut: true) */
-						randomAutoSlide: false, /** true,false ,autoSlide:true */
-						loop: false,  /** true,false */
-						background: "black", /** false or color*/
-						transition: "default", /** transition type: "slid","fade","default","random" , to show transition efects :transitionTime > 0.5 */
-						transitionTime: 1 /** transition time in seconds */
-					}
 				});
 			};
 			reader.readAsArrayBuffer(file);

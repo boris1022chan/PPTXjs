@@ -35,7 +35,6 @@
         var slideWidth = 0;
         var slideHeight = 0;
         var numOfSlides = 0;
-        var isSlideMode = false;
         var processFullTheme = true;
         var styleTable = {};
         var settings = $.extend(true, {
@@ -43,64 +42,14 @@
             fileContent: null,
             onComplete: () => { },
             onError: () => { },
-            slidesScale: "", //Change Slides scale by percent
-            slideMode: false, /** true,false*/
-            slideType: "divs2slidesjs",  /*'divs2slidesjs' (default) , 'revealjs'(https://revealjs.com)  -TODO*/
-            revealjsPath: "", /*path to js file of revealjs - TODO*/
-            keyBoardShortCut: false,  /** true,false ,condition: slideMode: true XXXXX - need to remove - this is doublcated*/
             mediaProcess: true, /** true,false: if true then process video and audio files */
-            jsZipV2: false,
             themeProcess: true, /*true (default) , false, "colorsAndImageOnly"*/
             incSlide: {
                 width: 0,
                 height: 0
             },
-            slideModeConfig: {
-                first: 1,
-                nav: true, /** true,false : show or not nav buttons*/
-                navTxtColor: "black", /** color */
-                keyBoardShortCut: true, /** true,false ,condition: */
-                showSlideNum: true, /** true,false */
-                showTotalSlideNum: true, /** true,false */
-                autoSlide: true, /** false or seconds , F8 to active ,keyBoardShortCut: true */
-                randomAutoSlide: false, /** true,false ,autoSlide:true */
-                loop: false,  /** true,false */
-                background: false, /** false or color*/
-                transition: "default", /** transition type: "slid","fade","default","random" , to show transition efects :transitionTime > 0.5 */
-                transitionTime: 1 /** transition time between slides in seconds */
-            },
-            revealjsConfig: {}
         }, options);
-
         processFullTheme = settings.themeProcess;
-
-        if (settings.slideMode) {
-            if (!jQuery().divs2slides) {
-                jQuery.getScript('./js/divs2slides.js');
-            }
-        }
-        if (settings.jsZipV2 !== false) {
-            jQuery.getScript(settings.jsZipV2);
-            if (localStorage.getItem('isPPTXjsReLoaded') !== 'yes') {
-                localStorage.setItem('isPPTXjsReLoaded', 'yes');
-                location.reload();
-            }
-        }
-
-        if (settings.keyBoardShortCut) {
-            $(document).bind("keydown", function (event) {
-                event.preventDefault();
-                var key = event.keyCode;
-                console.log(key, isDone)
-                if (key == 116 && !isSlideMode) { //F5
-                    isSlideMode = true;
-                    initSlideMode(divId, settings);
-                } else if (key == 116 && isSlideMode) {
-                    //exit slide mode - TODO
-
-                }
-            });
-        }
 
         if (settings.fileContent) {
             const blob = new Blob([settings.fileContent], { type: "application/vnd.openxmlformats-officedocument.presentationml.presentation" });
@@ -162,107 +111,16 @@
                         processMsgQueue(MsgQueue);
                         setNumericBullets($(".block"));
                         setNumericBullets($("table td"));
-
                         isDone = true;
-
-                        if (settings.slideMode && !isSlideMode) {
-                            isSlideMode = true;
-                            initSlideMode(divId, settings);
-                        }
                         break;
                     default:
                 }
             }
-            if (!settings.slideMode || (settings.slideMode && settings.slideType == "revealjs")) {
 
-                if (document.getElementById("all_slides_warpper") === null) {
-                    $("#" + divId + " .slide").wrapAll("<div id='all_slides_warpper' class='slides'></div>");
-                    //$("#" + divId + " .slides").wrap("<div class='reveal'></div>");
-                }
-
-                if (settings.slideMode && settings.slideType == "revealjs") {
-                    $("#" + divId).addClass("reveal")
-                }
+            if (document.getElementById("all_slides_warpper") === null) {
+                $("#" + divId + " .slide").wrapAll("<div id='all_slides_warpper' class='slides'></div>");
+                //$("#" + divId + " .slides").wrap("<div class='reveal'></div>");
             }
-
-            var sScale = settings.slidesScale;
-            var trnsfrmScl = "";
-            if (sScale != "") {
-                var numsScale = parseInt(sScale);
-                var scaleVal = numsScale / 100;
-                if (settings.slideMode && settings.slideType != "revealjs") {
-                    trnsfrmScl = 'transform:scale(' + scaleVal + '); transform-origin:top';
-                }
-            }
-
-            var slidesHeight = $("#" + divId + " .slide").height();
-            var numOfSlides = $("#" + divId + " .slide").length;
-            var sScaleVal = (sScale != "") ? scaleVal : 1;
-            //console.log("slidesHeight: " + slidesHeight + "\nnumOfSlides: " + numOfSlides + "\nScale: " + sScaleVal)
-
-            $("#all_slides_warpper").attr({
-                style: trnsfrmScl + ";height: " + (numOfSlides * slidesHeight * sScaleVal) + "px"
-            })
-
-            //}
-        }
-
-        function initSlideMode(divId, settings) {
-            //console.log(settings.slideType)
-            if (settings.slideType == "" || settings.slideType == "divs2slidesjs") {
-                var slidesHeight = $("#" + divId + " .slide").height();
-                $("#" + divId + " .slide").hide();
-                setTimeout(function () {
-                    var slideConf = settings.slideModeConfig;
-                    $("#" + divId).divs2slides({
-                        first: slideConf.first,
-                        nav: slideConf.nav,
-                        showPlayPauseBtn: settings.showPlayPauseBtn,
-                        navTxtColor: slideConf.navTxtColor,
-                        keyBoardShortCut: slideConf.keyBoardShortCut,
-                        showSlideNum: slideConf.showSlideNum,
-                        showTotalSlideNum: slideConf.showTotalSlideNum,
-                        autoSlide: slideConf.autoSlide,
-                        randomAutoSlide: slideConf.randomAutoSlide,
-                        loop: slideConf.loop,
-                        background: slideConf.background,
-                        transition: slideConf.transition,
-                        transitionTime: slideConf.transitionTime
-                    });
-
-                    var sScale = settings.slidesScale;
-                    var trnsfrmScl = "";
-                    if (sScale != "") {
-                        var numsScale = parseInt(sScale);
-                        var scaleVal = numsScale / 100;
-                        trnsfrmScl = 'transform:scale(' + scaleVal + '); transform-origin:top';
-                    }
-
-                    var numOfSlides = 1;
-                    var sScaleVal = (sScale != "") ? scaleVal : 1;
-                    //console.log(slidesHeight);
-                    $("#all_slides_warpper").attr({
-                        style: trnsfrmScl + ";height: " + (numOfSlides * slidesHeight * sScaleVal) + "px"
-                    })
-
-                }, 1500);
-            } else if (settings.slideType == "revealjs") {
-                var revealjsPath = "";
-                if (settings.revealjsPath != "") {
-                    revealjsPath = settings.revealjsPath;
-                } else {
-                    revealjsPath = "./revealjs/reveal.js";
-                }
-                $.getScript(revealjsPath, function (response, status) {
-                    if (status == "success") {
-                        // $("section").removeClass("slide");
-                        Reveal.initialize(settings.revealjsConfig); //revealjsConfig - TODO
-                    }
-                });
-            }
-
-
-
         }
 
         function processPPTX(zip) {
@@ -646,11 +504,8 @@
                 bgColor = getSlideBackgroundFill(warpObj, index);
             }
 
-            if (settings.slideMode && settings.slideType == "revealjs") {
-                var result = "<section class='slide' style='width:" + slideSize.width + "px; height:" + slideSize.height + "px;" + bgColor + "'>"
-            } else {
-                var result = "<div class='slide' style='width:" + slideSize.width + "px; height:" + slideSize.height + "px;" + bgColor + "'>"
-            }
+
+            var result = "<div class='slide' style='width:" + slideSize.width + "px; height:" + slideSize.height + "px;" + bgColor + "'>"
             result += bgResult;
             for (var nodeKey in nodes) {
                 if (nodes[nodeKey].constructor === Array) {
@@ -661,12 +516,7 @@
                     result += processNodesInSlide(nodeKey, nodes[nodeKey], nodes, warpObj, "slide");
                 }
             }
-            if (settings.slideMode && settings.slideType == "revealjs") {
-                return result + "</div></section>";
-            } else {
-                return result + "</div></div>";
-            }
-
+            return result + "</div></div>";
         }
 
         function indexNodes(content) {
@@ -9565,25 +9415,12 @@
 
         function genGlobalCSS() {
             var cssText = "";
-            //console.log("styleTable: ", styleTable)
             for (var key in styleTable) {
                 var tagname = "";
-                // if (settings.slideMode && settings.slideType == "revealjs") {
-                //     tagname = "section";
-                // } else {
-                //     tagname = "div";
-                // }
                 //ADD suffix
                 cssText += tagname + " ." + styleTable[key]["name"] +
                     ((styleTable[key]["suffix"]) ? styleTable[key]["suffix"] : "") +
                     "{" + styleTable[key]["text"] + "}\n"; //section > div
-            }
-            //cssText += " .slide{margin-bottom: 5px;}\n"; // TODO
-
-            if (settings.slideMode && settings.slideType == "divs2slidesjs") {
-                //divId
-                //console.log("slideWidth: ", slideWidth)
-                cssText += "#all_slides_warpper{margin-right: auto;margin-left: auto;padding-top:10px;width: " + slideWidth + "px;}\n"; // TODO
             }
             return cssText;
         }
