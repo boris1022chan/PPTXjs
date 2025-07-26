@@ -39,8 +39,7 @@
         var styleTable = {};
         var settings = $.extend(true, {
             // These are the defaults.
-            pptxFileUrl: "",
-            fileInputId: "",
+            fileContent: null,
             slidesScale: "", //Change Slides scale by percent
             slideMode: false, /** true,false*/
             slideType: "divs2slidesjs",  /*'divs2slidesjs' (default) , 'revealjs'(https://revealjs.com)  -TODO*/
@@ -99,49 +98,15 @@
                 }
             });
         }
-        FileReaderJS.setSync(false);
-        if (settings.pptxFileUrl != "") {
-            try {
-                JSZipUtils.getBinaryContent(settings.pptxFileUrl, function (err, content) {
-                    var blob = new Blob([content]);
-                    var file_name = settings.pptxFileUrl;
-                    var fArry = file_name.split(".");
-                    fArry.pop();
-                    blob.name = fArry[0];
-                    FileReaderJS.setupBlob(blob, {
-                        readAsDefault: "ArrayBuffer",
-                        on: {
-                            load: function (e, file) {
-                                //console.log(e.target.result);
-                                convertToHtml(e.target.result);
-                            }
-                        }
-                    });
-                });
-            } catch (e) {
-                console.error("file url error (" + settings.pptxFileUrl + "0)")
-                $(".slides-loadnig-msg").remove();
-            }
-        }
-        if (settings.fileInputId != "") {
-            $("#" + settings.fileInputId).on("change", function (evt) {
-                $result.html("");
-                var file = evt.target.files[0];
-                // var fileName = file[0].name;
-                //var fileSize = file[0].size;
-                var fileType = file.type;
-                if (fileType == "application/vnd.openxmlformats-officedocument.presentationml.presentation") {
-                    FileReaderJS.setupBlob(file, {
-                        readAsDefault: "ArrayBuffer",
-                        on: {
-                            load: function (e, file) {
-                                //console.log(e.target.result);
-                                convertToHtml(e.target.result);
-                            }
-                        }
-                    });
-                } else {
-                    alert("This is not pptx file");
+
+        if (settings.fileContent) {
+            const blob = new Blob([settings.fileContent], { type: "application/vnd.openxmlformats-officedocument.presentationml.presentation" });
+            FileReaderJS.setupBlob(blob, {
+                readAsDefault: "ArrayBuffer",
+                on: {
+                    load: function (e) {
+                        convertToHtml(e.target.result);
+                    }
                 }
             });
         }
