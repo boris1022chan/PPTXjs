@@ -8666,7 +8666,7 @@
                         prg_width_node = total_text_len + bu_width;
                     }
                 }
-                var prg_width = ((prg_width_node !== undefined) ? ("width:" + (prg_width_node)) + "px;" : "width:inherit;");
+                var prg_width = !!prg_width_node ? `width:${prg_width_node}px;` : "width:inherit;";
                 text += "<div style='height: 100%;direction: initial;overflow-wrap:break-word;word-wrap: break-word;" + prg_width + margin + "' >";
                 text += prgrph_text;
                 text += "</div>";
