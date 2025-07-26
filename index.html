@@ -44,6 +44,7 @@
 			}
 			const reader = new FileReader();
 			reader.onload = function (event) {
+				document.getElementById("container").innerHTML = "";
 				pptxToHtml({
 					divId: "container",
 					fileContent: event.target.result,

@@ -8118,14 +8118,10 @@ function pptxToHtml(options) {
         var imgName = resObj[rid]["target"];
 
         //console.log("processPicNode imgName:", imgName);
-        var imgFileExt = extractFileExtension(imgName).toLowerCase();
         var zip = warpObj["zip"];
-        var imgArrayBuffer = zip.file(imgName).asArrayBuffer();
-        var mimeType = "";
         var xfrmNode = node["p:spPr"]["a:xfrm"];
         if (xfrmNode === undefined) {
             var idx = getTextByPathList(node, ["p:nvPicPr", "p:nvPr", "p:ph", "attrs", "idx"]);
-            var type = getTextByPathList(node, ["p:nvPicPr", "p:nvPr", "p:ph", "attrs", "type"]);
             if (idx !== undefined) {
                 xfrmNode = getTextByPathList(warpObj["slideLayoutTables"], ["idxTable", idx, "p:spPr", "a:xfrm"]);
             }
@@ -8138,7 +8134,7 @@ function pptxToHtml(options) {
         }
         //video
         var vdoNode = getTextByPathList(node, ["p:nvPicPr", "p:nvPr", "a:videoFile"]);
-        var vdoRid, vdoFile, vdoFileExt, vdoMimeType, uInt8Array, blob, vdoBlob, mediaSupportFlag = false, isVdeoLink = false;
+        var vdoRid, vdoFile, vdoFileExt, vdoBlob, mediaSupportFlag = false, isVdeoLink = false;
         var mediaProcess = settings.mediaProcess;
         if (vdoNode !== undefined & mediaProcess) {
             vdoRid = vdoNode["attrs"]["r:link"];
@@ -8153,12 +8149,7 @@ function pptxToHtml(options) {
             } else {
                 vdoFileExt = extractFileExtension(vdoFile).toLowerCase();
                 if (vdoFileExt == "mp4" || vdoFileExt == "webm" || vdoFileExt == "ogg") {
-                    uInt8Array = zip.file(vdoFile).asArrayBuffer();
-                    vdoMimeType = getMimeType(vdoFileExt);
-                    blob = new Blob([uInt8Array], {
-                        type: vdoMimeType
-                    });
-                    vdoBlob = URL.createObjectURL(blob);
+                    vdoBlob = getFileObjectURL(vdoFile, zip);
                     mediaSupportFlag = true;
                     mediaPicFlag = true;
                 }
@@ -8166,7 +8157,7 @@ function pptxToHtml(options) {
         }
         //Audio
         var audioNode = getTextByPathList(node, ["p:nvPicPr", "p:nvPr", "a:audioFile"]);
-        var audioRid, audioFile, audioFileExt, audioMimeType, uInt8ArrayAudio, blobAudio, audioBlob;
+        var audioRid, audioFile, audioFileExt, audioBlob;
         var audioPlayerFlag = false;
         var audioObjc;
         if (audioNode !== undefined & mediaProcess) {
@@ -8174,9 +8165,7 @@ function pptxToHtml(options) {
             audioFile = resObj[audioRid]["target"];
             audioFileExt = extractFileExtension(audioFile).toLowerCase();
             if (audioFileExt == "mp3" || audioFileExt == "wav" || audioFileExt == "ogg") {
-                uInt8ArrayAudio = zip.file(audioFile).asArrayBuffer();
-                blobAudio = new Blob([uInt8ArrayAudio]);
-                audioBlob = URL.createObjectURL(blobAudio);
+                audioBlob = getFileObjectURL(audioFile, zip);
                 var cx = parseInt(xfrmNode["a:ext"]["attrs"]["cx"]) * 20;
                 var cy = xfrmNode["a:ext"]["attrs"]["cy"];
                 var x = parseInt(xfrmNode["a:off"]["attrs"]["x"]) / 2.5;
@@ -8203,14 +8192,14 @@ function pptxToHtml(options) {
         }
         //console.log(node)
         //////////////////////////////////////////////////////////////////////////
-        mimeType = getMimeType(imgFileExt);
         rtrnData = "<div class='block content' style='" +
             ((mediaProcess && audioPlayerFlag) ? getPosition(audioObjc, node, undefined, undefined) : getPosition(xfrmNode, node, undefined, undefined)) +
             ((mediaProcess && audioPlayerFlag) ? getSize(audioObjc, undefined, undefined) : getSize(xfrmNode, undefined, undefined)) +
             " z-index: " + order + ";" +
             "transform: rotate(" + rotate + "deg);'>";
         if ((vdoNode === undefined && audioNode === undefined) || !mediaProcess || !mediaSupportFlag) {
-            rtrnData += "<img src='data:" + mimeType + ";base64," + base64ArrayBuffer(imgArrayBuffer) + "' style='width: 100%; height: 100%'/>";
+            const url = getFileObjectURL(imgName, zip);
+            rtrnData += `<img src="${url}" style='width: 100%; height: 100%'/>`;
         } else if ((vdoNode !== undefined || audioNode !== undefined) && mediaProcess && mediaSupportFlag) {
             if (vdoNode !== undefined && !isVdeoLink) {
                 rtrnData += "<video  src='" + vdoBlob + "' controls style='width: 100%; height: 100%'>Your browser does not support the video tag.</video>";
@@ -8814,20 +8803,11 @@ function pptxToHtml(options) {
             // }
             //var buPicId = getTextByPathList(buPic, ["a:blip","a:extLst","a:ext","asvg:svgBlip" , "attrs", "r:embed"]);
             var buPicId = getTextByPathList(buPic, ["a:blip", "attrs", "r:embed"]);
-            var svgPicPath = "";
             var buImg;
             if (buPicId !== undefined) {
-                //svgPicPath = warpObj["slideResObj"][buPicId]["target"];
-                //buImg = warpObj["zip"].file(svgPicPath).asText();
-                //}else{
-                //buPicId = getTextByPathList(buPic, ["a:blip", "attrs", "r:embed"]);
-                var imgPath = warpObj["slideResObj"][buPicId]["target"];
-                //console.log("imgPath: ", imgPath);
-                var imgArrayBuffer = warpObj["zip"].file(imgPath).asArrayBuffer();
-                var imgExt = imgPath.split(".").pop();
-                var imgMimeType = getMimeType(imgExt);
-                buImg = "<img src='data:" + imgMimeType + ";base64," + base64ArrayBuffer(imgArrayBuffer) + "' style='width: 100%;'/>"// height: 100%
-                //console.log("imgPath: "+imgPath+"\nimgMimeType: "+imgMimeType)
+                const imgPath = warpObj["slideResObj"][buPicId]["target"];
+                const url = getFileObjectURL(imgPath, warpObj["zip"]);
+                buImg = `<img src='${url}' style='width: 100%;'/>`;
             }
             if (buPicId === undefined) {
                 buImg = "&#8227;";
@@ -11988,16 +11968,11 @@ function pptxToHtml(options) {
         img = getTextByPathList(warpObj, ["loaded-images", imgPath]); //, type, rId
         if (img === undefined) {
             imgPath = escapeHtml(imgPath);
-
-
             var imgExt = imgPath.split(".").pop();
             if (imgExt == "xml") {
                 return undefined;
             }
-            var imgArrayBuffer = warpObj["zip"].file(imgPath).asArrayBuffer();
-            var imgMimeType = getMimeType(imgExt);
-            img = "data:" + imgMimeType + ";base64," + base64ArrayBuffer(imgArrayBuffer);
-            //warpObj["loaded-images"][imgPath] = img; //"defaultTextStyle": defaultTextStyle,
+            img = getFileObjectURL(imgPath, warpObj["zip"]);
             setTextByPathList(warpObj, ["loaded-images", imgPath], img); //, type, rId
         }
         return img;
@@ -13660,40 +13635,20 @@ function pptxToHtml(options) {
         }
         return aNum;
     }
-    function base64ArrayBuffer(arrayBuffer) {
-        var base64 = '';
-        var encodings = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-        var bytes = new Uint8Array(arrayBuffer);
-        var byteLength = bytes.byteLength;
-        var byteRemainder = byteLength % 3;
-        var mainLength = byteLength - byteRemainder;
 
-        var a, b, c, d;
-        var chunk;
-
-        for (var i = 0; i < mainLength; i = i + 3) {
-            chunk = (bytes[i] << 16) | (bytes[i + 1] << 8) | bytes[i + 2];
-            a = (chunk & 16515072) >> 18;
-            b = (chunk & 258048) >> 12;
-            c = (chunk & 4032) >> 6;
-            d = chunk & 63;
-            base64 += encodings[a] + encodings[b] + encodings[c] + encodings[d];
+    const fileToUrlCache = {};
+    function getFileObjectURL(fileName, zip) {
+        if (fileToUrlCache[fileName]) {
+            return fileToUrlCache[fileName];
         }
 
-        if (byteRemainder == 1) {
-            chunk = bytes[mainLength];
-            a = (chunk & 252) >> 2;
-            b = (chunk & 3) << 4;
-            base64 += encodings[a] + encodings[b] + '==';
-        } else if (byteRemainder == 2) {
-            chunk = (bytes[mainLength] << 8) | bytes[mainLength + 1];
-            a = (chunk & 64512) >> 10;
-            b = (chunk & 1008) >> 4;
-            c = (chunk & 15) << 2;
-            base64 += encodings[a] + encodings[b] + encodings[c] + '=';
-        }
-
-        return base64;
+        const fileExt = extractFileExtension(fileName).toLowerCase();
+        const mimeType = getMimeType(fileExt);
+        const uint8Array = zip.file(fileName).asUint8Array();
+        const blob = new Blob([uint8Array], { type: mimeType });
+        const url = URL.createObjectURL(blob);
+        fileToUrlCache[fileName] = url;
+        return url;
     }
 
     function IsVideoLink(vdoFile) {
