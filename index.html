@@ -9,7 +9,6 @@
 	<link rel="stylesheet" href="./css/pptxjs.css">
 	<link rel="stylesheet" href="./css/nv.d3.min.css">
 
-	<script type="text/javascript" src="./js/jquery-1.11.3.min.js"></script>
 	<script type="text/javascript" src="./js/d3.min.js"></script>
 	<script type="text/javascript" src="./js/dingbat.min.js"></script>
 	<script type="text/javascript" src="./js/filereader.min.js"></script>
@@ -45,7 +44,8 @@
 			}
 			const reader = new FileReader();
 			reader.onload = function (event) {
-				$("#container").pptxToHtml({
+				pptxToHtml({
+					divId: "container",
 					fileContent: event.target.result,
 					onComplete: (metadata) => console.log(metadata),
 					onError: (error) => console.error(error),
