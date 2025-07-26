@@ -1,12 +1,10 @@
-/**
+/** @preserve
  * pptxjs.js
  * Ver. : 1.21.1
  * last update: 16/11/2021
  * Author: meshesha , https://github.com/meshesha
  * LICENSE: MIT
  * url:https://pptx.js.org/
- * fix issues:
- * [#16](https://github.com/meshesha/PPTXjs/issues/16)
  */
 
 (function ($) {
@@ -74,16 +72,6 @@
 
         processFullTheme = settings.themeProcess;
 
-        $("#" + divId).prepend(
-            $("<div></div>").attr({
-                "class": "slides-loadnig-msg",
-                "style": "display:block; width:100%; color:white; background-color: #ddd;"
-            })/*.html("Loading...")*/
-                .html($("<div></div>").attr({
-                    "class": "slides-loading-progress-bar",
-                    "style": "width: 1%; background-color: #4775d1;"
-                }).html("<span style='text-align: center;'>Loading... (1%)</span>"))
-        );
         if (settings.slideMode) {
             if (!jQuery().divs2slides) {
                 jQuery.getScript('./js/divs2slides.js');
@@ -134,8 +122,6 @@
                 console.error("file url error (" + settings.pptxFileUrl + "0)")
                 $(".slides-loadnig-msg").remove();
             }
-        } else {
-            $(".slides-loadnig-msg").remove()
         }
         if (settings.fileInputId != "") {
             $("#" + settings.fileInputId).on("change", function (evt) {
@@ -160,19 +146,11 @@
             });
         }
 
-        function updateProgressBar(percent) {
-            //console.log("percent: ", percent)
-            var progressBarElemtnt = $(".slides-loading-progress-bar")
-            progressBarElemtnt.width(percent + "%")
-            progressBarElemtnt.html("<span style='text-align: center;'>Loading...(" + percent + "%)</span>");
-        }
-
         function convertToHtml(file) {
             //'use strict';
             //console.log("file", file, "size:", file.byteLength);
             if (file.byteLength < 10) {
                 console.error("file url error (" + settings.pptxFileUrl + "0)")
-                $(".slides-loadnig-msg").remove();
                 return;
             }
             var zip = new JSZip(), s;
@@ -213,13 +191,7 @@
                         if (settings.slideMode && !isSlideMode) {
                             isSlideMode = true;
                             initSlideMode(divId, settings);
-                        } else if (!settings.slideMode) {
-                            $(".slides-loadnig-msg").remove();
                         }
-                        break;
-                    case "progress-update":
-                        //console.log(rslt_ary[i]["data"]); //update progress bar - TODO
-                        updateProgressBar(rslt_ary[i]["data"])
                         break;
                     default:
                 }
@@ -265,7 +237,6 @@
                 $("#" + divId + " .slide").hide();
                 setTimeout(function () {
                     var slideConf = settings.slideModeConfig;
-                    $(".slides-loadnig-msg").remove();
                     $("#" + divId).divs2slides({
                         first: slideConf.first,
                         nav: slideConf.nav,
@@ -299,7 +270,6 @@
 
                 }, 1500);
             } else if (settings.slideType == "revealjs") {
-                $(".slides-loadnig-msg").remove();
                 var revealjsPath = "";
                 if (settings.revealjsPath != "") {
                     revealjsPath = settings.revealjsPath;
@@ -13489,7 +13459,7 @@
             if (alpha !== "") {
                 a = alpha;
             } else {
-                a = 01;
+                a = 1;
             }
             // multiply before convert to HEX
             a = ((a * 255) | 1 << 8).toString(16).slice(1)
